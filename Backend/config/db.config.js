@@ -26,18 +26,6 @@ export const dbConfig2 = {
   },
 };
 
-// Config for Database 3
-export const dbConfig3 = {
-  user: process.env.DB_USER3,
-  password: process.env.DB_PASSWORD3,
-  server: process.env.DB_SERVER3,
-  database: process.env.DB_NAME3,
-  options: {
-    encrypt: false,
-    trustServerCertificate: true,
-  },
-};
-
 // Function to connect to any given config
 const pools = new Map();
 

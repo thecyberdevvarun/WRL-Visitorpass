@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
 import path from "path";
-import { connectToDB, dbConfig1, dbConfig2, dbConfig3 } from "./config/db.js";
+import { connectToDB, dbConfig1, dbConfig2 } from "./config/db.config.js";
 import cookieParser from "cookie-parser";
 
 const _dirname = path.resolve();
@@ -28,7 +28,6 @@ app.use("/uploads", express.static(path.resolve("uploads"))); // Static files
   try {
     global.pool1 = await connectToDB(dbConfig1);
     global.pool2 = await connectToDB(dbConfig2);
-    global.pool3 = await connectToDB(dbConfig3);
   } catch (error) {
     console.error("Database connection error:", error);
   }

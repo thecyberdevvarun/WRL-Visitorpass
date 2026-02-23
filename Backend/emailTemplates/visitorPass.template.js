@@ -1,4 +1,4 @@
-import transporter from "../../config/email.config.js";
+import transporter from "../config/email.config.js";
 
 // -------------------- Visitor Pass Email --------------------
 export const sendVisitorPassMail = async ({

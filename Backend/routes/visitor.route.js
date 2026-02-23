@@ -1,10 +1,8 @@
 import express from "express";
 import { getDashboardStats } from "../controllers/dashboard.controller.js";
 import {
-  fetchDepartments,
   fetchPreviousPass,
   generateVisitorPass,
-  getEmployee,
   getVisitorPassDetails,
 } from "../controllers/generatepass.controller.js";
 import {
@@ -25,8 +23,6 @@ import { visitors } from "../controllers/visitors.controller.js";
 const router = express.Router();
 
 // -----------------> Visitor Pass Routes
-router.get("/departments", fetchDepartments);
-router.get("/employees", getEmployee);
 router.post("/generate-pass", generateVisitorPass);
 router.get("/fetch-previous-pass", fetchPreviousPass);
 router.get("/pass-details/:passId", getVisitorPassDetails);
