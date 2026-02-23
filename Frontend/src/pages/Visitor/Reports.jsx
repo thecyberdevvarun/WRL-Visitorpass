@@ -1,11 +1,12 @@
 import { useState } from "react";
-import Title from "../../components/common/Title";
+import Title from "../../components/ui/Title";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Button from "../../components/common/Button";
-import DateTimePicker from "../../components/common/DateTimePicker";
+import Button from "../../components/ui/Button";
+import DateTimePicker from "../../components/ui/DateTimePicker";
 import { baseURL } from "../../assets/assets";
-import Loader from "../../components/common/Loader";
+import Loader from "../../components/ui/Loader";
+import { formatISODateString } from "../../utils/dateUtils";
 
 const Reports = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ const Reports = () => {
   const formatDate = (date) => {
     const pad = (n) => (n < 10 ? "0" + n : n);
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate()
+      date.getDate(),
     )} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
   };
 
@@ -49,7 +50,7 @@ const Reports = () => {
     fetchVisitorData(
       formatDate(yesterday8AM),
       formatDate(today8AM),
-      setYdayLoading
+      setYdayLoading,
     );
   };
 
@@ -68,12 +69,12 @@ const Reports = () => {
       1,
       8,
       0,
-      0
+      0,
     );
     fetchVisitorData(
       formatDate(startOfMonth),
       formatDate(now),
-      setMonthLoading
+      setMonthLoading,
     );
   };
 
@@ -222,6 +223,7 @@ const Reports = () => {
             <tr>
               {[
                 "Sr.No.",
+                "Visitor Type",
                 "Name",
                 "Contact",
                 "Email",
@@ -232,11 +234,13 @@ const Reports = () => {
                 "ID Type",
                 "ID No",
                 "Vehicle",
-                "Department",
-                "Employee",
+                "Employee To Visit",
+                "Department To visit",
                 "Check In",
                 "Check Out",
-                "Purpose",
+                "Visit Duration",
+                "No of Visit",
+                "Purpose Of Visit",
                 "Token",
               ].map((header, idx) => (
                 <th
@@ -254,6 +258,9 @@ const Reports = () => {
               filteredReports.map((v, i) => (
                 <tr key={i} className="hover:bg-gray-50 transition">
                   <td className="px-1 py-1 border text-center">{i + 1}</td>
+                  <td className="px-1 py-1 border text-center whitespace-nowrap">
+                    {v.visit_type}
+                  </td>
                   <td className="px-1 py-1 border text-center whitespace-nowrap">
                     {v.visitor_name}
                   </td>
@@ -275,22 +282,26 @@ const Reports = () => {
                     {v.vehicle_details}
                   </td>
                   <td className="px-1 py-1 border text-center">
-                    {v.department_name}
-                  </td>
-                  <td className="px-1 py-1 border text-center">
                     {v.employee_name}
                   </td>
                   <td className="px-1 py-1 border text-center">
-                    {v.check_in_time?.replace("T", " ").replace("Z", "")}
+                    {v.department_name}
                   </td>
                   <td className="px-1 py-1 border text-center">
-                    {v.check_out_time ? (
-                      v.check_out_time.replace("T", " ").replace("Z", "")
-                    ) : (
+                    {formatISODateString(v.check_in_time)}
+                  </td>
+                  <td className="px-1 py-1 border text-center">
+                    {formatISODateString(v.check_out_time) || (
                       <span className="text-green-600 font-bold">
                         Currently In
                       </span>
                     )}
+                  </td>
+                  <td className="px-1 py-1 border text-center">
+                    {v.visit_duration}
+                  </td>
+                  <td className="px-1 py-1 border text-center">
+                    {v.no_of_visit}
                   </td>
                   <td className="px-1 py-1 border text-center">
                     {v.purpose_of_visit}

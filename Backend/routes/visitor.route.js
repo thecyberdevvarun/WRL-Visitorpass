@@ -1,26 +1,48 @@
 import express from "express";
-import { getDashboardStats } from "../controllers/dashboard.controller.js";
 import {
-  fetchPreviousPass,
+  fetchDepartments,
+  addDepartment,
+  updateDepartment,
+  deleteDepartment,
+  fetchUsers,
+  addUser,
+  updateUser,
+  deleteUser,
+} from "../controllers/manageEmployee.controller.js";
+import {
   generateVisitorPass,
+  fetchPreviousPass,
   getVisitorPassDetails,
 } from "../controllers/generatepass.controller.js";
 import {
-  getAllVisitors,
-  getVisitorDetails,
-} from "../controllers/history.controller.js";
-import {
-  getVisitorLogs,
   visitorIn,
   visitorOut,
+  getVisitorLogs,
 } from "../controllers/inOut.controller.js";
 import {
   fetchVisitors,
   sendVisitorReport,
 } from "../controllers/reports.controller.js";
-import { visitors } from "../controllers/visitors.controller.js";
+import { getDashboardStats } from "../controllers/dashboard.controller.js";
+import {
+  getAllVisitors,
+  getVisitorDetails,
+} from "../controllers/history.controller.js";
 
 const router = express.Router();
+
+// -----------------> Manage Employee Routes
+// Departments
+router.get("/departments", fetchDepartments);
+router.post("/departments", addDepartment);
+router.put("/departments/:deptCode", updateDepartment);
+router.delete("/departments/:deptCode", deleteDepartment);
+
+// Users
+router.get("/users", fetchUsers);
+router.post("/users", addUser);
+router.put("/users/:id", updateUser);
+router.delete("/users/:id", deleteUser);
 
 // -----------------> Visitor Pass Routes
 router.post("/generate-pass", generateVisitorPass);
@@ -36,9 +58,10 @@ router.get("/reprint/:passId", getVisitorPassDetails);
 // -----------------> Visitor Reports Routes
 router.get("/repot", fetchVisitors);
 router.post("/send-report", sendVisitorReport);
-router.get("/visitors", visitors);
+
 // -----------------> Visitor Dashboard Routes
 router.get("/dashboard-stats", getDashboardStats);
+
 // -----------------> Visitor History Routes
 router.get("/history", getAllVisitors);
 router.get("/details/:visitorId", getVisitorDetails);

@@ -1,12 +1,13 @@
 import { useRef, useState, useEffect } from "react";
-import Title from "../../components/common/Title";
-import InputField from "../../components/common/InputField";
-import SelectField from "../../components/common/SelectField";
+import Title from "../../components/ui/Title";
+import InputField from "../../components/ui/InputField";
+import SelectField from "../../components/ui/SelectField";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { baseURL } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { useGetEmployeesWithDepartmentsQuery } from "../../redux/api/commonApi.js";
 
 const GeneratePass = () => {
   const { user } = useSelector((store) => store.auth);
@@ -38,28 +39,21 @@ const GeneratePass = () => {
     createdBy: user?.id,
   });
   const [fetchLoading, setFetchLoading] = useState(false);
-  const [employees, setEmployees] = useState([]);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState("");
 
   /* ================= FETCH EMPLOYEES ================= */
+  const {
+    data: employees = [],
+    isLoading: employeesLoading,
+    isError: employeesError,
+  } = useGetEmployeesWithDepartmentsQuery();
+
   useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const res = await axios.get(`${baseURL}visitor/employees`);
-        const formatted = res.data.map((emp) => ({
-          label: emp.name,
-          value: emp.employee_id.toString(),
-          departmentName: emp.department_name,
-          departmentCode: emp.deptCode,
-        }));
-        setEmployees(formatted);
-      } catch {
-        toast.error("Failed to fetch employees");
-      }
-    };
-    fetchEmployees();
-  }, []);
+    if (employeesError) {
+      toast.error("Failed to fetch employees");
+    }
+  }, [employeesError]);
 
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const [error, setError] = useState(null);
@@ -184,7 +178,7 @@ const GeneratePass = () => {
                   onClick={async () => {
                     if (!videoRef.current?.srcObject) {
                       toast.error(
-                        "Camera is not active. Please allow camera access or connect a camera device."
+                        "Camera is not active. Please allow camera access or connect a camera device.",
                       );
                       await startCamera();
                       return;
@@ -270,14 +264,14 @@ const GeneratePass = () => {
       const res = await axios.post(`${baseURL}visitor/generate-pass`, payload);
       if (res?.data?.success) {
         toast.success(
-          res?.data?.message || "Visitor Pass generated successfully"
+          res?.data?.message || "Visitor Pass generated successfully",
         );
       }
       navigate(`/visitor-pass-display/${res?.data?.data?.passId}`);
     } catch (error) {
       console.error("Failed to generate visitor pass:", error);
       toast.error(
-        error.response?.data?.message || "Failed to generate visitor pass"
+        error.response?.data?.message || "Failed to generate visitor pass",
       );
     } finally {
       setLoading(false);
@@ -326,7 +320,7 @@ const GeneratePass = () => {
     } catch (error) {
       console.error("Failed to fetch visitor data:", error);
       toast.error(
-        error.response?.data?.message || "Failed to fetch visitor data"
+        error.response?.data?.message || "Failed to fetch visitor data",
       );
     } finally {
       setFetchLoading(false);
@@ -618,25 +612,24 @@ const GeneratePass = () => {
                     label="Employee To Visit"
                     name="employeeTo"
                     options={employees}
-                    value={visitorData.employeeTo} // Use visitorData state
+                    disabled={employeesLoading}
+                    value={visitorData.employeeTo}
                     onChange={(e) => {
-                      const selectedValue = e?.target?.value || e?.value || ""; // handle both native and custom select
+                      const selectedValue = e?.target?.value || e?.value || "";
                       const selectedEmp = employees.find(
-                        (opt) => opt.value === selectedValue
+                        (opt) => opt.value === selectedValue,
                       );
 
                       if (selectedEmp) {
                         setSelectedEmployees(selectedEmp);
                         setSelectedDepartment(selectedEmp.departmentName);
 
-                        // ✅ Ensure departmentTo updates correctly
                         setVisitorData((prev) => ({
                           ...prev,
                           employeeTo: selectedEmp.value,
                           departmentTo: selectedEmp.departmentCode,
                         }));
                       } else {
-                        // Reset if user clears the selection
                         setSelectedEmployees(null);
                         setSelectedDepartment("");
                         setVisitorData((prev) => ({

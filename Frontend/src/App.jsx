@@ -1,35 +1,22 @@
 import { lazy, Suspense, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useSelector } from "react-redux";
+import { useRoleAccess } from "./hooks/useRoleAccess.js";
 
 // Lazy loaded components
 const Layout = lazy(() => import("./components/Layout"));
 const Login = lazy(() => import("./pages/Auth/Login"));
 const Home = lazy(() => import("./pages/Home"));
-
-const Dashboard = lazy(() => import("./pages/Visitor/Dashboard"));
-const GeneratePass = lazy(() => import("./pages/Visitor/GeneratePass"));
-const VisitorPassDisplay = lazy(() =>
-  import("./pages/Visitor/VisitorPassDisplay")
-);
-const InOut = lazy(() => import("./pages/Visitor/InOut"));
-const Reports = lazy(() => import("./pages/Visitor/Reports"));
-const History = lazy(() => import("./pages/Visitor/History"));
-
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
+  const { accessibleRoutes } = useRoleAccess();
 
   const toggleSidebar = () => {
     setSidebarExpanded((prev) => !prev);
   };
 
-  const userRole = useSelector((state) => state.auth.user?.role || "");
-
-  const canAccess = (allowedRoles) =>
-    allowedRoles.includes(userRole) || userRole === "admin";
   return (
     <Suspense
       fallback={
@@ -54,29 +41,16 @@ function App() {
           >
             <Route path="/" index element={<Home />} />
 
-            {/*-------------------------------------------------------------- Visitor --------------------------------------------------------------*/}
-            {canAccess(["admin", "security", "hr"]) && (
-              <Route path="/visitor/dashboard" element={<Dashboard />} />
-            )}
-            {canAccess(["admin", "security", "hr"]) && (
-              <Route path="/visitor/generate-pass" element={<GeneratePass />} />
-            )}
-            {canAccess(["admin", "security", "hr"]) && (
+            {/* Dynamic routes based on user role */}
+            {accessibleRoutes.map((route) => (
               <Route
-                path="/visitor-pass-display/:passId"
-                element={<VisitorPassDisplay />}
+                key={route.path}
+                path={route.path}
+                element={<route.component />}
               />
-            )}
-            {canAccess(["admin", "security", "hr"]) && (
-              <Route path="/visitor/in-out" element={<InOut />} />
-            )}
-            {canAccess(["admin", "security", "hr"]) && (
-              <Route path="/visitor/reports" element={<Reports />} />
-            )}
-            {canAccess(["admin", "security", "hr"]) && (
-              <Route path="/visitor/history" element={<History />} />
-            )}
-            {/*-------------------------------------------------------------- Catch All --------------------------------------------------------------*/}
+            ))}
+
+            {/* Catch All */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

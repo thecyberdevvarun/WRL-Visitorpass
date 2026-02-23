@@ -42,7 +42,7 @@ const SelectField = ({
 
   const selectedLabel =
     options.find((opt) =>
-      typeof opt === "string" ? opt === value : opt.value === value
+      typeof opt === "string" ? opt === value : opt.value === value,
     )?.label || value;
 
   return (

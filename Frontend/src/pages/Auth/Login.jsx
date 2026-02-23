@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Title from "../../components/common/Title";
-import Button from "../../components/common/Button";
+import Title from "../../components/ui/Title";
+import Button from "../../components/ui/Button";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -61,7 +61,7 @@ const Login = () => {
         { empcod: formData.empcod, password: formData.password },
         {
           withCredentials: true,
-        }
+        },
       );
       if (res?.data?.success) {
         dispatch(setAuthUser(res?.data?.user));
@@ -74,7 +74,7 @@ const Login = () => {
     } catch (err) {
       console.error("Login failed:", err);
       toast.error(
-        err.response?.data?.message || "Login failed. Please try again."
+        err.response?.data?.message || "Login failed. Please try again.",
       );
     } finally {
       setLoading(false);
