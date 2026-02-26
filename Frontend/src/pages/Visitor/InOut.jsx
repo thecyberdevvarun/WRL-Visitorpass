@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import Title from "../../components/ui/Title";
 import Button from "../../components/ui/Button";
 import {
   FaSignInAlt,
@@ -21,6 +20,19 @@ import toast from "react-hot-toast";
 import { baseURL } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { formatISODateString } from "../../utils/dateUtils";
+
+/* ==================== Counter Card (Dashboard-style) ==================== */
+const CounterCard = ({ icon: Icon, title, value, color }) => (
+  <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
+    <div className={`mr-4 p-3 rounded-full ${color}`}>
+      <Icon className="text-white text-2xl" />
+    </div>
+    <div>
+      <p className="text-gray-500 text-sm">{title}</p>
+      <h2 className="text-2xl font-bold">{value}</h2>
+    </div>
+  </div>
+);
 
 const InOut = () => {
   const [loading, setLoading] = useState(false);
@@ -122,7 +134,6 @@ const InOut = () => {
           } successfully!`,
         );
 
-        // Highlight popup effect
         showNotification(
           type === "in" ? "Visitor Checked In" : "Visitor Checked Out",
           `Pass ID: ${passId}`,
@@ -164,109 +175,123 @@ const InOut = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 overflow-x-hidden max-w-full relative">
-      <Title title="Manage Visitor" align="center" />
+      {/* Page Title */}
+      <h1 className="text-3xl font-bold text-center mb-4">Manage Visitor</h1>
 
       {/* Search Bar */}
-      <div className="max-w-md mx-auto mt-6">
+      <div className="max-w-md mx-auto mb-6">
         <input
           type="text"
           placeholder="Search by name, pass ID, department..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full border border-gray-300 rounded-lg p-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      {/* Dashboard-Style Counter Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <CounterCard
+          icon={FaUsers}
+          title="Total Visitors"
+          value={totalVisitors}
+          color="bg-blue-500"
+        />
+        <CounterCard
+          icon={FaSignInAlt}
+          title="Currently In"
+          value={currentlyIn}
+          color="bg-green-500"
+        />
+        <CounterCard
+          icon={FaSignOutAlt}
+          title="Checked Out"
+          value={currentlyOut}
+          color="bg-red-500"
         />
       </div>
 
       {/* Scan In / Out */}
-      <div className="max-w-3xl mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Scan IN */}
-        <div className="flex gap-2">
-          <input
-            ref={scanInRef}
-            type="text"
-            placeholder="Scan Pass ID for IN"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleVisitorActionForCard("in", e.target.value);
-                e.target.value = "";
-              }
-            }}
-            className="w-full border border-green-400 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-green-500 outline-none"
-          />
-          <Button
-            onClick={(e) => {
-              const input = e.target.parentNode.querySelector("input");
-              handleVisitorActionForCard("in", input.value);
-              input.value = "";
-            }}
-            bgColor="bg-green-600"
-            textColor="text-white"
-            className="px-4 py-2 rounded-md"
-          >
-            IN
-          </Button>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        {/* Scan IN Card */}
+        <div className="bg-white shadow-md rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-gray-500 mb-2 flex items-center gap-2">
+            <FaSignInAlt className="text-green-500" /> Scan IN
+          </h3>
+          <div className="flex gap-2">
+            <input
+              ref={scanInRef}
+              type="text"
+              placeholder="Scan Pass ID for IN"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleVisitorActionForCard("in", e.target.value);
+                  e.target.value = "";
+                }
+              }}
+              className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+            <button
+              onClick={(e) => {
+                const input = e.target
+                  .closest(".bg-white")
+                  .querySelector("input");
+                handleVisitorActionForCard("in", input.value);
+                input.value = "";
+              }}
+              className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
+            >
+              IN
+            </button>
+          </div>
         </div>
 
-        {/* Scan OUT */}
-        <div className="flex gap-2">
-          <input
-            ref={scanOutRef}
-            type="text"
-            placeholder="Scan Pass ID for OUT"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleVisitorActionForCard("out", e.target.value);
-                e.target.value = "";
-              }
-            }}
-            className="w-full border border-red-400 rounded-lg p-3 shadow-sm focus:ring-2 focus:ring-red-500 outline-none"
-          />
-          <Button
-            onClick={(e) => {
-              const input = e.target.parentNode.querySelector("input");
-              handleVisitorActionForCard("out", input.value);
-              input.value = "";
-            }}
-            bgColor="bg-red-600"
-            textColor="text-white"
-            className="px-4 py-2 rounded-md"
-          >
-            OUT
-          </Button>
+        {/* Scan OUT Card */}
+        <div className="bg-white shadow-md rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-gray-500 mb-2 flex items-center gap-2">
+            <FaSignOutAlt className="text-red-500" /> Scan OUT
+          </h3>
+          <div className="flex gap-2">
+            <input
+              ref={scanOutRef}
+              type="text"
+              placeholder="Scan Pass ID for OUT"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleVisitorActionForCard("out", e.target.value);
+                  e.target.value = "";
+                }
+              }}
+              className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+            />
+            <button
+              onClick={(e) => {
+                const input = e.target
+                  .closest(".bg-white")
+                  .querySelector("input");
+                handleVisitorActionForCard("out", input.value);
+                input.value = "";
+              }}
+              className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-600 transition cursor-pointer"
+            >
+              OUT
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Main Card Container */}
-      <div className="mt-10 bg-white shadow-md rounded-xl p-6 border border-gray-200">
-        {/* Counters */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-          {/* Total / In / Out */}
-          <div className="flex gap-6 text-lg font-semibold text-gray-700 items-center">
-            <span className="flex items-center gap-2">
-              <FaUsers className="text-blue-600 text-xl" />
-              Total: {totalVisitors}
-            </span>
-
-            <span className="flex items-center gap-2 text-green-600">
-              <FaSignInAlt className="text-green-600 text-xl" />
-              In: {currentlyIn}
-            </span>
-
-            <span className="flex items-center gap-2 text-red-600">
-              <FaSignOutAlt className="text-red-600 text-xl" />
-              Out: {currentlyOut}
-            </span>
-          </div>
-        </div>
+      {/* Visitor List Container */}
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h3 className="text-xl font-semibold mb-4">Visitor Log</h3>
 
         {/* Visitor List */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full mx-auto"></div>
-            <p className="text-gray-500 mt-4">Loading visitors...</p>
+            <div className="animate-spin h-10 w-10 border-b-2 border-blue-500 rounded-full mx-auto"></div>
+            <p className="text-gray-500 text-sm mt-4">Loading visitors...</p>
           </div>
         ) : filteredVisitors.length > 0 ? (
-          <div className="grid gap-6">
+          <div className="grid gap-4">
             {filteredVisitors.map((visitor, index) => {
               const isCurrentlyIn =
                 visitor.check_in_time && !visitor.check_out_time;
@@ -278,15 +303,15 @@ const InOut = () => {
               return (
                 <div
                   key={visitor.pass_id || index}
-                  className={`transition-all duration-200 rounded-xl p-6 border ${
+                  className={`transition-all duration-200 rounded-lg p-5 border ${
                     isCurrentlyIn
-                      ? "bg-green-50 border-green-400 shadow-md"
+                      ? "bg-green-50 border-green-300"
                       : atSecurityGate
-                        ? "bg-blue-50 border-blue-400 shadow-md"
+                        ? "bg-blue-50 border-blue-300"
                         : "bg-gray-50 border-gray-200"
                   }`}
                 >
-                  <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6">
+                  <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5">
                     {/* Photo */}
                     <div
                       className="shrink-0 relative cursor-pointer"
@@ -299,61 +324,72 @@ const InOut = () => {
                         <img
                           src={visitor.visitor_photo}
                           alt={`${visitor.visitor_name || "Visitor"}'s photo`}
-                          className="w-24 h-24 object-cover rounded-full border-4 border-blue-300 shadow-md hover:scale-105 transition-transform"
+                          className="w-20 h-20 object-cover rounded-full border-4 border-blue-300 shadow-md hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div className="w-24 h-24 flex items-center justify-center bg-gray-100 rounded-full border-4 border-gray-300 text-gray-400 shadow-md">
-                          <CgProfile className="text-5xl" />
+                        <div className="w-20 h-20 flex items-center justify-center bg-gray-100 rounded-full border-4 border-gray-300 text-gray-400 shadow-md">
+                          <CgProfile className="text-4xl" />
                         </div>
                       )}
 
                       {isCurrentlyIn && (
-                        <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                          Currently In
+                        <span className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                          In
                         </span>
                       )}
                       {atSecurityGate && (
-                        <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                          At Security Gate
+                        <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                          Gate
                         </span>
                       )}
                     </div>
 
                     {/* Visitor Info */}
                     <div className="flex-1 text-center lg:text-left">
-                      <h3 className="text-2xl font-bold text-gray-800 mb-1">
+                      <h3 className="text-lg font-bold text-gray-800 mb-0.5">
                         {visitor.visitor_name}
                       </h3>
 
-                      <p className="text-sm text-gray-500 mb-3">
+                      <p className="text-xs text-gray-500 mb-3">
                         <span className="font-medium">Pass ID:</span>{" "}
                         {visitor.pass_id}
                       </p>
 
                       {/* Times */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                        <div className="flex items-center gap-2">
-                          <MdAccessTime className="text-green-600 text-xl" />
-                          <span className="font-medium">Check In:</span>
-                          <span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                        <div className="flex items-center gap-2 text-sm">
+                          <MdAccessTime className="text-green-500 text-lg" />
+                          <span className="font-medium text-gray-700">
+                            Check In:
+                          </span>
+                          <span className="text-gray-600">
                             {formatISODateString(visitor.check_in_time) ||
                               "N/A"}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <MdAccessTime className="text-red-600 text-xl" />
-                          <span className="font-medium">Check Out:</span>
-                          <span>
-                            {formatISODateString(visitor.check_out_time) ||
-                              "N/A"}
+                        <div className="flex items-center gap-2 text-sm">
+                          <MdAccessTime className="text-red-500 text-lg" />
+                          <span className="font-medium text-gray-700">
+                            Check Out:
+                          </span>
+                          <span className="text-gray-600">
+                            {visitor.check_out_time ? (
+                              formatISODateString(visitor.check_out_time)
+                            ) : isCurrentlyIn ? (
+                              <span className="text-green-600 font-bold">
+                                Currently In
+                              </span>
+                            ) : (
+                              "N/A"
+                            )}
                           </span>
                         </div>
                       </div>
 
                       {/* Details */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-                        <div className="space-y-2">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                        <div className="space-y-1.5">
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
                             <MdBusiness className="text-purple-500" />
                             <span>{visitor.employee_name || "N/A"}</span>
@@ -368,7 +404,7 @@ const InOut = () => {
                           </div>
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
                             <MdBusiness className="text-purple-500" />
                             <span>{visitor.department_name || "N/A"}</span>
@@ -387,46 +423,40 @@ const InOut = () => {
                       {/* Buttons */}
                       <div className="mt-4 flex flex-wrap justify-center lg:justify-start gap-3">
                         {atSecurityGate && (
-                          <Button
+                          <button
                             onClick={() =>
                               handleVisitorActionForCard("in", visitor.pass_id)
                             }
-                            bgColor="bg-blue-600"
-                            textColor="text-white"
-                            className="px-4 py-2 rounded-md flex items-center gap-2"
+                            className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition cursor-pointer flex items-center gap-2"
                           >
                             <FaSignInAlt /> In
-                          </Button>
+                          </button>
                         )}
 
                         {isCurrentlyIn && (
                           <>
-                            <Button
+                            <button
                               onClick={() =>
                                 handleVisitorActionForCard(
                                   "out",
                                   visitor.pass_id,
                                 )
                               }
-                              bgColor="bg-red-600"
-                              textColor="text-white"
-                              className="px-4 py-2 rounded-md flex items-center gap-2"
+                              className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-600 transition cursor-pointer flex items-center gap-2"
                             >
                               <FaSignOutAlt /> Out
-                            </Button>
+                            </button>
 
-                            <Button
+                            <button
                               onClick={() =>
                                 navigate(
                                   `/visitor-pass-display/${visitor.pass_id}`,
                                 )
                               }
-                              bgColor="bg-yellow-500"
-                              textColor="text-white"
-                              className="px-4 py-2 rounded-md flex items-center gap-2"
+                              className="px-4 py-2 bg-purple-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-purple-600 transition cursor-pointer flex items-center gap-2"
                             >
                               🖨️ Reprint Pass
-                            </Button>
+                            </button>
                           </>
                         )}
                       </div>
@@ -439,17 +469,26 @@ const InOut = () => {
         ) : (
           <div className="text-center py-16">
             <FaUser className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-600">
+            <h3 className="text-xl font-medium text-gray-500">
               No visitors found
             </h3>
+            <p className="text-gray-400 text-sm mt-1">
+              Try adjusting your search criteria
+            </p>
           </div>
         )}
       </div>
 
       {/* Photo Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <div className="relative max-w-3xl">
+        <div
+          className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative max-w-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <img
               src={selectedImage}
               alt="Visitor"
@@ -457,7 +496,7 @@ const InOut = () => {
             />
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute -top-6 -right-6 bg-red-600 text-white rounded-full p-2 shadow-lg"
+              className="absolute -top-4 -right-4 bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600 transition cursor-pointer"
             >
               <FaTimes className="text-lg" />
             </button>

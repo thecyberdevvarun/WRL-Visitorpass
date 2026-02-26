@@ -12,7 +12,7 @@ const Button = ({
     <button
       onClick={onClick}
       className={`${bgColor} ${textColor} ${padding} ${borderRadius} ${className} hover:opacity-90 focus:outline-none cursor-pointer`}
-      {...props} // Spread the other props like 'type', 'disabled', etc.
+      {...props}
     >
       {children}
     </button>

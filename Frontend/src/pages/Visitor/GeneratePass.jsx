@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import Title from "../../components/ui/Title";
 import InputField from "../../components/ui/InputField";
 import SelectField from "../../components/ui/SelectField";
 import axios from "axios";
@@ -63,10 +62,8 @@ const GeneratePass = () => {
 
   const startCamera = async () => {
     try {
-      // 🟢 Step 1: Request permission once so that Edge can list cameras
       await navigator.mediaDevices.getUserMedia({ video: true });
 
-      // 🟢 Step 2: Now get all available devices
       const devices = await navigator.mediaDevices.enumerateDevices();
       const videoDevices = devices.filter((d) => d.kind === "videoinput");
 
@@ -75,10 +72,8 @@ const GeneratePass = () => {
         return;
       }
 
-      // 🟢 Step 3: Choose the last camera (often external)
       const selectedDeviceId = videoDevices[videoDevices.length - 1].deviceId;
 
-      // 🟢 Step 4: Start camera using the chosen device
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           deviceId: selectedDeviceId ? { ideal: selectedDeviceId } : undefined,
@@ -86,11 +81,8 @@ const GeneratePass = () => {
         audio: false,
       });
 
-      // 🟢 Step 5: Assign stream to the <video> element
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-
-        // Ensure autoplay works in Edge (muted + playsInline)
         videoRef.current.muted = true;
         videoRef.current.playsInline = true;
 
@@ -117,42 +109,39 @@ const GeneratePass = () => {
     }
   };
 
-  // Capture photo
   const capturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    // Set canvas dimensions
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    // Draw video frame to canvas
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Convert to image
     const photoDataUrl = canvas.toDataURL("image/jpeg");
 
-    // Update states
     setCapturedPhoto(photoDataUrl);
     setVisitorData((prev) => ({
       ...prev,
       visitorPhoto: photoDataUrl,
     }));
 
-    // Stop video stream
     const stream = video.srcObject;
     const tracks = stream.getTracks();
     tracks.forEach((track) => track.stop());
   };
 
-  // Render photo capture section
   const renderPhotoCaptureSection = () => {
     return (
-      <div className="photo-capture-section flex flex-col gap-2 items-center justify-center">
-        {error && <div className="error text-red-500">{error}</div>}
+      <div className="photo-capture-section flex flex-col gap-2 items-center justify-center mb-4">
+        {error && (
+          <div className="text-red-500 text-sm bg-red-50 p-2 rounded-lg w-full text-center">
+            {error}
+          </div>
+        )}
 
-        <div className="camera-preview flex flex-col items-center justify-center">
+        <div className="camera-preview flex flex-col items-center justify-center w-full">
           {!capturedPhoto ? (
             <>
               <video
@@ -162,13 +151,13 @@ const GeneratePass = () => {
                   display: capturedPhoto ? "none" : "block",
                   transform: "scaleX(-1)",
                 }}
-                className="bg-white border border-dashed border-purple-400 rounded-xl"
+                className="bg-gray-50 border border-gray-200 rounded-lg w-full max-w-xs"
               />
-              <div className="flex gap-4 my-4">
+              <div className="flex gap-4 mt-4">
                 <button
                   type="button"
                   onClick={startCamera}
-                  className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 mr-2 cursor-pointer"
+                  className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition cursor-pointer"
                 >
                   Open Camera
                 </button>
@@ -185,7 +174,7 @@ const GeneratePass = () => {
                     }
                     capturePhoto();
                   }}
-                  className="px-4 py-2 font-semibold rounded-lg shadow-md bg-green-600 text-white hover:bg-green-700 cursor-pointer"
+                  className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
                 >
                   Capture Photo
                 </button>
@@ -196,12 +185,13 @@ const GeneratePass = () => {
               <img
                 src={capturedPhoto}
                 alt="Captured"
-                className="captured-photo"
+                className="rounded-lg border border-gray-200 w-full max-w-xs"
               />
-              <div className="flex my-4">
+              <div className="flex mt-4">
                 <button
+                  type="button"
                   onClick={() => setCapturedPhoto(null)}
-                  className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 cursor-pointer"
+                  className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
                 >
                   Retake
                 </button>
@@ -210,13 +200,11 @@ const GeneratePass = () => {
           )}
         </div>
 
-        {/* Hidden canvas for photo capture */}
         <canvas ref={canvasRef} style={{ display: "none" }} />
       </div>
     );
   };
 
-  // Handler to update form data
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVisitorData((prev) => ({
@@ -225,11 +213,9 @@ const GeneratePass = () => {
     }));
   };
 
-  // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 🚨 PHOTO REQUIRED
     if (!visitorData.visitorPhoto) {
       toast.error("Please capture visitor photo before generating the pass.");
       document
@@ -238,7 +224,6 @@ const GeneratePass = () => {
       return;
     }
 
-    // Basic validation
     const requiredFields = [
       "name",
       "contactNo",
@@ -284,7 +269,7 @@ const GeneratePass = () => {
       return;
     }
 
-    const contactNoRegex = /^[0-9]{10}$/; // Assumes 10-digit phone number
+    const contactNoRegex = /^[0-9]{10}$/;
     if (!contactNoRegex.test(visitorData.contactNo)) {
       toast.error("Please enter a valid 10-digit contact number");
       return;
@@ -298,7 +283,6 @@ const GeneratePass = () => {
       if (res?.data?.success) {
         const fetchedData = res?.data?.data;
 
-        // Update visitor data with fetched information
         setVisitorData((prevData) => ({
           ...prevData,
           name: fetchedData.name || prevData.name,
@@ -329,16 +313,17 @@ const GeneratePass = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 overflow-x-hidden max-w-full">
-      <Title title="Generate Pass" align="center" />
+      {/* Page Title - matches Dashboard h1 */}
+      <h1 className="text-3xl font-bold text-center mb-4">Generate Pass</h1>
 
       {/* Visitor Pass Form */}
       <form onSubmit={handleSubmit} className="mt-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Personal Information Section */}
-          <div className="bg-white shadow-md rounded-xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* ==================== Personal Information Section ==================== */}
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h3 className="text-xl font-semibold mb-4 text-center">
               Personal Information
-            </h2>
+            </h3>
             {renderPhotoCaptureSection()}
             <div className="grid grid-cols-2 gap-4 w-full">
               <div className="w-full">
@@ -352,7 +337,7 @@ const GeneratePass = () => {
                   className="w-full"
                 />
               </div>
-              <div className="flex items-center  justify-center gap-2 w-full">
+              <div className="flex items-center justify-center gap-2 w-full">
                 <InputField
                   label="Contact No."
                   type="text"
@@ -367,7 +352,7 @@ const GeneratePass = () => {
                     type="button"
                     onClick={handleFetchPreviousData}
                     disabled={fetchLoading}
-                    className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ${
+                    className={`px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition ${
                       fetchLoading
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer"
@@ -450,20 +435,27 @@ const GeneratePass = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4 text-center">
+
+          {/* ==================== Address & Identity Section ==================== */}
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h3 className="text-xl font-semibold mb-4 text-center">
               Address & Identity
-            </h2>
+            </h3>
             <div className="space-y-3">
-              <label className="block font-semibold mb-1">Addess</label>
-              <textarea
-                name="address"
-                value={visitorData.address}
-                onChange={handleInputChange}
-                placeholder="Full Address"
-                className="w-full p-2 border rounded"
-                required
-              />
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Address
+                </label>
+                <textarea
+                  name="address"
+                  value={visitorData.address}
+                  onChange={handleInputChange}
+                  placeholder="Full Address"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  required
+                  rows={3}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4 w-full">
                 <div className="w-full">
                   <SelectField
@@ -534,7 +526,6 @@ const GeneratePass = () => {
                       { value: "ladakh", label: "Ladakh" },
                       { value: "lakshadweep", label: "Lakshadweep" },
                       { value: "puducherry", label: "Puducherry" },
-                      // All Indian states and union territories included
                     ]}
                     value={visitorData.state}
                     onChange={handleInputChange}
@@ -568,15 +559,18 @@ const GeneratePass = () => {
             </div>
           </div>
 
-          {/* Visit Details Section */}
-          <div className="bg-white shadow-md rounded-xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold mb-4 text-center">
+          {/* ==================== Visit Details Section ==================== */}
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h3 className="text-xl font-semibold mb-4 text-center">
               Visit Details
-            </h2>
+            </h3>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-4 w-full">
                 <div className="w-full">
-                  <label className="block font-semibold mb-1" htmlFor="allowOn">
+                  <label
+                    className="block text-sm font-semibold text-gray-700 mb-1"
+                    htmlFor="allowOn"
+                  >
                     Allow On
                   </label>
                   <input
@@ -585,14 +579,14 @@ const GeneratePass = () => {
                     name="allowOn"
                     value={visitorData.allowOn}
                     onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                     required
                   />
                 </div>
 
                 <div className="w-full">
                   <label
-                    className="block font-semibold mb-1"
+                    className="block text-sm font-semibold text-gray-700 mb-1"
                     htmlFor="allowTill"
                   >
                     Allow Till
@@ -603,7 +597,7 @@ const GeneratePass = () => {
                     name="allowTill"
                     value={visitorData.allowTill}
                     onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                     required
                   />
                 </div>
@@ -645,12 +639,12 @@ const GeneratePass = () => {
                 </div>
                 <div className="w-full">
                   <label
-                    className="block font-semibold mb-1"
+                    className="block text-sm font-semibold text-gray-700 mb-1"
                     htmlFor="department"
                   >
                     Department
                   </label>
-                  <p className="border p-2 rounded bg-white">
+                  <p className="border border-gray-300 p-2 rounded-lg bg-gray-50 text-sm text-gray-600">
                     {selectedDepartment ||
                       "Select an employee to view department"}
                   </p>
@@ -686,8 +680,8 @@ const GeneratePass = () => {
                 </div>
               </div>
 
-              <div className="mb-4">
-                <label className="block font-semibold mb-1">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Items / Assets Brought In
                 </label>
                 <textarea
@@ -695,23 +689,26 @@ const GeneratePass = () => {
                   value={visitorData.specialInstruction}
                   onChange={handleInputChange}
                   placeholder="List any items or assets being brought onto the premises"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                   required
                   rows={4}
                 />
               </div>
 
-              <label className="block font-semibold mb-1">
-                Purpose of Visit
-              </label>
-              <textarea
-                name="purposeOfVisit"
-                value={visitorData.purposeOfVisit}
-                onChange={handleInputChange}
-                placeholder="Enter the Purpose of Visit"
-                className="w-full p-2 border rounded"
-                required
-              />
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Purpose of Visit
+                </label>
+                <textarea
+                  name="purposeOfVisit"
+                  value={visitorData.purposeOfVisit}
+                  onChange={handleInputChange}
+                  placeholder="Enter the Purpose of Visit"
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  required
+                  rows={3}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -720,9 +717,12 @@ const GeneratePass = () => {
         <div className="mt-6 text-center">
           <button
             type="submit"
-            className="px-6 py-2 rounded text-white transition bg-purple-600 hover:bg-purple-700 cursor-pointer"
+            disabled={loading}
+            className={`px-6 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 transition ${
+              loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+            }`}
           >
-            Generate Visitor Pass
+            {loading ? "Generating..." : "Generate Visitor Pass"}
           </button>
         </div>
       </form>

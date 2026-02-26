@@ -5,7 +5,7 @@ const NotFound = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <section className="w-full bg-white dark:bg-gray-900">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <div className="py-8 px-4 mx-auto max-w-7xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
             <div className="flex items-center justify-center gap-4">
               <FaSearch
