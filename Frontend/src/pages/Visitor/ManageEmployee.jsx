@@ -856,10 +856,16 @@ const ManageEmployee = () => {
           {/* Hint */}
           <div className="mt-3 pt-3 border-t border-gray-100">
             <p className="text-sm text-center">
-              Click a department to filter employees
+              Click a{" "}
+              <span className="text-red-500 font-medium">department tab</span>{" "}
+              to filter employees.
             </p>
             <p className="text-sm text-center">
-              Click department code badge in employee table to locate it here
+              Click a{" "}
+              <span className="text-purple-500 font-medium">
+                department code badge
+              </span>{" "}
+              in employee table to locate it here.
             </p>
           </div>
         </div>
