@@ -1,38 +1,55 @@
-import { FaArrowLeft, FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaArrowLeft, FaHome, FaSearch } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { MdErrorOutline } from "react-icons/md";
 
 const NotFound = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <section className="w-full bg-white dark:bg-gray-900">
-        <div className="py-8 px-4 mx-auto max-w-7xl lg:py-16 lg:px-6">
-          <div className="mx-auto max-w-screen-sm text-center">
-            <div className="flex items-center justify-center gap-4">
-              <FaSearch
-                className="text-blue-600 dark:text-blue-500"
-                size={64}
-              />
-              <h1 className="text-blue-600 dark:text-blue-500 font-extrabold text-7xl lg:text-9xl select-none">
-                404
-              </h1>
+      <div className="bg-white shadow-md rounded-lg p-10 max-w-lg w-full text-center">
+        {/* Icon */}
+        <div className="flex items-center justify-center mb-6">
+          <div className="relative">
+            <div className="p-5 rounded-full bg-blue-100">
+              <FaSearch className="text-blue-500 text-4xl" />
             </div>
-            <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
-              Something's missing.
-            </p>
-            <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-              Sorry, we can't find that page. You'll find lots to explore on the
-              home page.
-            </p>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-900 my-4"
-            >
-              <FaArrowLeft />
-              Back to Homepage
-            </Link>
+            <div className="absolute -top-1 -right-1 p-1.5 rounded-full bg-red-500">
+              <MdErrorOutline className="text-white text-lg" />
+            </div>
           </div>
         </div>
-      </section>
+
+        {/* 404 */}
+        <h1 className="text-8xl font-black text-blue-500 select-none mb-4">
+          404
+        </h1>
+
+        {/* Message */}
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          Page Not Found
+        </h2>
+        <p className="text-base text-gray-500 mb-8 max-w-sm mx-auto">
+          Sorry, the page you're looking for doesn't exist or has been moved.
+          Let's get you back on track.
+        </p>
+
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="px-5 py-2.5 bg-gray-400 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-gray-500 transition cursor-pointer flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <FaArrowLeft /> Go Back
+          </button>
+          <Link
+            to="/"
+            className="px-5 py-2.5 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition flex items-center gap-2 w-full sm:w-auto justify-center"
+          >
+            <FaHome /> Back to Home
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
