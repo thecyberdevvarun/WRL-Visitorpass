@@ -18,7 +18,6 @@ import {
 } from "react-icons/fa";
 import { MdHistory, MdFilterList } from "react-icons/md";
 import { baseURL } from "../../assets/assets";
-import Loader from "../../components/ui/Loader";
 import { formatISODateString } from "../../utils/dateUtils";
 
 /* ==================== Dashboard-Style Stat Card ==================== */

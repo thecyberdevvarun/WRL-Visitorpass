@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import Button from "../../components/ui/Button";
 import {
   FaSignInAlt,
   FaSignOutAlt,
@@ -455,7 +454,7 @@ const InOut = () => {
                               }
                               className="px-4 py-2 bg-purple-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-purple-600 transition cursor-pointer flex items-center gap-2"
                             >
-                              🖨️ Reprint Pass
+                              Reprint Pass
                             </button>
                           </>
                         )}

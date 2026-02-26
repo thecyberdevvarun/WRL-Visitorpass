@@ -2,46 +2,24 @@
 
 @import "tailwindcss";
 
+/* Global Font */
 * {
-  font-family: Outfit;
+  font-family: "Outfit", sans-serif;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
 }
 
+/* Hide Scrollbar (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Playfair Utility */
 .font-playfair {
-  font-family: Playfair !important;
+  font-family: "Playfair", serif !important;
 }
 
-/* Base Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent; /* or use a light grey if needed */
-  border-radius: 10px;
-}
-
-/* Thumb */
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2); /* subtle dark */
-  border-radius: 10px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-  transition: background 0.3s ease;
-}
-
-/* On hover */
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-/* Optional: Horizontal scrollbar */
-::-webkit-scrollbar-horizontal {
-  height: 8px;
-}
-
-
+/* Custom Utilities */
 @layer utilities {
   @keyframes marquee {
     0% {
