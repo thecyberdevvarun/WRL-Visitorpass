@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import Title from "../../components/ui/Title";
 import Button from "../../components/ui/Button";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setAuthUser } from "../../redux/authSlice.js";
+import { setAuthUser } from "../../redux/slices/authSlice.js";
 import { assets, baseURL } from "../../assets/assets.js";
 import { FaEye, FaEyeSlash, FaUser, FaLock } from "react-icons/fa";
 
-// Array of industrial background images from assets
 const industrialBackgrounds = [
   assets.industrialBg1,
   assets.industrialBg2,
@@ -114,10 +112,13 @@ const Login = () => {
               alt="Western Logo"
               className="h-16 w-auto mb-2"
             />
-            <Title
-              title="Welcome Back"
-              subTitle="Please enter your credentials to access your dashboard based on your role."
-            />
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-3">Welcome Back</h1>
+              <p className="text-gray-500 dark:text-gray-400 text-base max-w-xl mx-auto">
+                Please enter your credentials to access your dashboard based on
+                your role.
+              </p>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-2">

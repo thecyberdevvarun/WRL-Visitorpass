@@ -17,13 +17,15 @@ import { baseURL } from "../../assets/assets";
 
 /* ==================== Dashboard-Style Stat Card ==================== */
 const StatCard = ({ icon: Icon, title, value, color }) => (
-  <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
+  <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-4 flex items-center transition-colors duration-300">
     <div className={`mr-4 p-3 rounded-full ${color}`}>
       <Icon className="text-white text-2xl" />
     </div>
     <div>
-      <p className="text-gray-500 text-sm">{title}</p>
-      <h2 className="text-2xl font-bold">{value}</h2>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">{title}</p>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+        {value}
+      </h2>
     </div>
   </div>
 );
@@ -51,7 +53,6 @@ const ManageEmployee = () => {
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
   const [highlightedDeptCode, setHighlightedDeptCode] = useState(null);
 
-  // Ref for department rows
   const deptRefs = useRef({});
   const deptScrollContainerRef = useRef(null);
 
@@ -86,7 +87,6 @@ const ManageEmployee = () => {
     fetchDepartments();
   }, []);
 
-  // Auto-remove highlight after 2 seconds
   useEffect(() => {
     if (highlightedDeptCode) {
       const timer = setTimeout(() => {
@@ -106,13 +106,11 @@ const ManageEmployee = () => {
     setDepartmentDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Highlight department in right table
   const handleDeptClickFromUserTable = (deptId) => {
     const deptCode = deptId.toString();
     setSelectedDepartmentId(deptCode);
     setHighlightedDeptCode(deptCode);
 
-    // Scroll to that department row
     const targetRow = deptRefs.current[deptCode];
     if (targetRow && deptScrollContainerRef.current) {
       const container = deptScrollContainerRef.current;
@@ -292,13 +290,14 @@ const ManageEmployee = () => {
     return matchesSearch && matchesDepartment;
   });
 
-  // Fixed table height
   const TABLE_HEIGHT = "h-[500px]";
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 max-w-full">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-4 max-w-full transition-colors duration-300">
       {/* Page Title */}
-      <h1 className="text-3xl font-bold text-center mb-4">Manage Employee</h1>
+      <h1 className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-white">
+        Manage Employee
+      </h1>
 
       {/* ==================== Stats Cards ==================== */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -325,9 +324,9 @@ const ManageEmployee = () => {
       {/* ==================== Forms Section ==================== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Add / Edit User Form */}
-        <div className="lg:col-span-2 bg-white shadow-md rounded-lg p-6">
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <FaUserPlus className="text-blue-500" />
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
+          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+            <FaUserPlus className="text-blue-500 dark:text-blue-400" />
             {editingUserId ? "Edit Employee" : "Add Employee"}
           </h3>
 
@@ -410,10 +409,10 @@ const ManageEmployee = () => {
               disabled={loading}
               className={`px-6 py-2 text-white text-sm font-semibold rounded-lg shadow-md transition flex items-center gap-2 ${
                 loading
-                  ? "bg-gray-400 cursor-not-allowed"
+                  ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
                   : editingUserId
-                    ? "bg-green-500 hover:bg-green-600 cursor-pointer"
-                    : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                    ? "bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 cursor-pointer"
+                    : "bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 cursor-pointer"
               }`}
             >
               {loading ? (
@@ -446,7 +445,7 @@ const ManageEmployee = () => {
                     managerEmail: "",
                   });
                 }}
-                className="px-6 py-2 bg-gray-400 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-gray-500 transition cursor-pointer flex items-center gap-2"
+                className="px-6 py-2 bg-gray-400 dark:bg-gray-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-gray-500 dark:hover:bg-gray-500 transition cursor-pointer flex items-center gap-2"
               >
                 <FaTimes className="text-xs" /> Cancel
               </button>
@@ -455,9 +454,9 @@ const ManageEmployee = () => {
         </div>
 
         {/* Add / Edit Department Form */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <FaBuilding className="text-purple-500" />
+        <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
+          <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+            <FaBuilding className="text-purple-500 dark:text-purple-400" />
             {editingDeptCode ? "Edit Department" : "Add Department"}
           </h3>
 
@@ -504,10 +503,10 @@ const ManageEmployee = () => {
               disabled={loading}
               className={`px-6 py-2 text-white text-sm font-semibold rounded-lg shadow-md transition flex items-center gap-2 ${
                 loading
-                  ? "bg-gray-400 cursor-not-allowed"
+                  ? "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
                   : editingDeptCode
-                    ? "bg-green-500 hover:bg-green-600 cursor-pointer"
-                    : "bg-purple-500 hover:bg-purple-600 cursor-pointer"
+                    ? "bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 cursor-pointer"
+                    : "bg-purple-500 dark:bg-purple-600 hover:bg-purple-600 dark:hover:bg-purple-700 cursor-pointer"
               }`}
             >
               {loading ? (
@@ -533,7 +532,7 @@ const ManageEmployee = () => {
                   setEditingDeptCode(null);
                   setDepartmentDetails({ name: "", deptCode: "", headId: "" });
                 }}
-                className="px-6 py-2 bg-gray-400 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-gray-500 transition cursor-pointer flex items-center gap-2"
+                className="px-6 py-2 bg-gray-400 dark:bg-gray-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-gray-500 dark:hover:bg-gray-500 transition cursor-pointer flex items-center gap-2"
               >
                 <FaTimes className="text-xs" /> Cancel
               </button>
@@ -545,13 +544,14 @@ const ManageEmployee = () => {
       {/* ==================== Tables Section ==================== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* --------- Users Table --------- */}
-        <div className="lg:col-span-2 bg-white shadow-md rounded-lg p-6">
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
           {/* Table Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
-            <h3 className="text-xl font-semibold flex items-center gap-2">
-              <FaUsers className="text-blue-500" /> Registered Employees
+            <h3 className="text-xl font-semibold flex items-center gap-2 text-gray-800 dark:text-white">
+              <FaUsers className="text-blue-500 dark:text-blue-400" />{" "}
+              Registered Employees
               {selectedDepartmentId && (
-                <span className="text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full font-medium ml-2">
+                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-2.5 py-1 rounded-full font-medium ml-2">
                   Dept: {selectedDepartmentId}
                 </span>
               )}
@@ -560,18 +560,22 @@ const ManageEmployee = () => {
             <div className="flex items-center gap-3">
               {/* Search */}
               <div className="relative">
-                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xs" />
                 <input
                   type="text"
                   placeholder="Search employees..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 w-56"
+                  className="pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm w-56
+                    bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                    placeholder-gray-400 dark:placeholder-gray-500
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500
+                    transition-colors duration-300"
                 />
               </div>
 
               {/* Count Badge */}
-              <span className="inline-flex items-center bg-blue-100 text-blue-700 font-bold text-xs px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold text-xs px-2.5 py-1 rounded-full">
                 {filteredUsers.length}
               </span>
 
@@ -579,7 +583,7 @@ const ManageEmployee = () => {
               {selectedDepartmentId && (
                 <button
                   onClick={() => setSelectedDepartmentId(null)}
-                  className="px-3 py-1.5 bg-red-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-red-600 transition cursor-pointer flex items-center gap-1"
+                  className="px-3 py-1.5 bg-red-500 dark:bg-red-600 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-red-600 dark:hover:bg-red-700 transition cursor-pointer flex items-center gap-1"
                 >
                   <FaTimes className="text-[10px]" /> Clear
                 </button>
@@ -589,34 +593,34 @@ const ManageEmployee = () => {
 
           {/* Scrollable Table */}
           <div
-            className={`${TABLE_HEIGHT} overflow-y-auto border border-gray-200 rounded-lg`}
+            className={`${TABLE_HEIGHT} overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg`}
           >
             {filteredUsers.length > 0 ? (
               <table className="w-full text-sm border-collapse">
-                <thead className="bg-gray-100 sticky top-0 z-10">
+                <thead className="bg-gray-100 dark:bg-gray-700 sticky top-0 z-10">
                   <tr>
-                    <th className="p-3 text-center text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Sr.
                     </th>
-                    <th className="p-3 text-left text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Name
                     </th>
-                    <th className="p-3 text-left text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Employee ID
                     </th>
-                    <th className="p-3 text-center text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Department
                     </th>
-                    <th className="p-3 text-left text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Contact
                     </th>
-                    <th className="p-3 text-left text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Employee Email
                     </th>
-                    <th className="p-3 text-left text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Manager Email
                     </th>
-                    <th className="p-3 text-center text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Actions
                     </th>
                   </tr>
@@ -625,40 +629,42 @@ const ManageEmployee = () => {
                   {filteredUsers.map((user, index) => (
                     <tr
                       key={user.id}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition"
+                      className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
                     >
-                      <td className="p-3 text-center text-gray-700">
+                      <td className="p-3 text-center text-gray-700 dark:text-gray-300">
                         {index + 1}
                       </td>
-                      <td className="p-3 font-medium text-gray-800">
+                      <td className="p-3 font-medium text-gray-800 dark:text-gray-200">
                         {user.name}
                       </td>
-                      <td className="p-3 text-gray-700">{user.employee_id}</td>
+                      <td className="p-3 text-gray-700 dark:text-gray-300">
+                        {user.employee_id}
+                      </td>
                       <td className="p-3 text-center">
                         <button
                           onClick={() =>
                             handleDeptClickFromUserTable(user.department_id)
                           }
-                          className="inline-flex items-center bg-purple-100 text-purple-700 font-semibold text-xs px-2.5 py-1 rounded-full cursor-pointer hover:bg-purple-200 hover:ring-2 hover:ring-purple-400 transition-all"
+                          className="inline-flex items-center bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-semibold text-xs px-2.5 py-1 rounded-full cursor-pointer hover:bg-purple-200 dark:hover:bg-purple-900/50 hover:ring-2 hover:ring-purple-400 dark:hover:ring-purple-500 transition-all"
                           title={`Click to highlight department ${user.department_id}`}
                         >
                           <FaBuilding className="mr-1 text-[10px]" />
                           {user.department_id}
                         </button>
                       </td>
-                      <td className="p-3 text-gray-700">
+                      <td className="p-3 text-gray-700 dark:text-gray-300">
                         {user.contact_number || "—"}
                       </td>
-                      <td className="p-3 text-gray-700">
+                      <td className="p-3 text-gray-700 dark:text-gray-300">
                         {user.employee_email}
                       </td>
-                      <td className="p-3 text-gray-700">
+                      <td className="p-3 text-gray-700 dark:text-gray-300">
                         {user.manager_email}
                       </td>
                       <td className="p-3">
                         <div className="flex justify-center gap-2">
                           <button
-                            className="p-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition cursor-pointer"
+                            className="p-1.5 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/50 transition cursor-pointer"
                             onClick={() => {
                               setUserDetails({
                                 name: user.name,
@@ -679,7 +685,7 @@ const ManageEmployee = () => {
                             <FaEdit size={14} />
                           </button>
                           <button
-                            className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition cursor-pointer"
+                            className="p-1.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition cursor-pointer"
                             onClick={() => handleDeleteUser(user.id)}
                             title="Delete"
                           >
@@ -693,11 +699,11 @@ const ManageEmployee = () => {
               </table>
             ) : (
               <div className="flex flex-col items-center justify-center h-full py-16">
-                <FaUsers className="text-6xl text-gray-300 mb-4" />
-                <h3 className="text-xl font-medium text-gray-500">
+                <FaUsers className="text-6xl text-gray-300 dark:text-gray-600 mb-4" />
+                <h3 className="text-xl font-medium text-gray-500 dark:text-gray-400">
                   No employees found
                 </h3>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
                   {searchTerm
                     ? "Try adjusting your search criteria"
                     : "Add a new employee to get started"}
@@ -707,12 +713,12 @@ const ManageEmployee = () => {
           </div>
 
           {/* Table Footer */}
-          <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
-            <p className="text-xs">
+          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Showing {filteredUsers.length} of {users.length} employees
             </p>
             {selectedDepartmentId && (
-              <p className="text-xs text-blue-500 font-medium">
+              <p className="text-xs text-blue-500 dark:text-blue-400 font-medium">
                 Filtered by Department: {selectedDepartmentId}
               </p>
             )}
@@ -720,36 +726,37 @@ const ManageEmployee = () => {
         </div>
 
         {/* --------- Departments Table --------- */}
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
           {/* Table Header */}
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold flex items-center gap-2">
-              <FaBuilding className="text-purple-500" /> Departments
+            <h3 className="text-xl font-semibold flex items-center gap-2 text-gray-800 dark:text-white">
+              <FaBuilding className="text-purple-500 dark:text-purple-400" />{" "}
+              Departments
             </h3>
-            <span className="inline-flex items-center bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-full">
+            <span className="inline-flex items-center bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-bold text-xs px-2.5 py-1 rounded-full">
               {departments.length}
             </span>
           </div>
 
-          {/* Scrollable Table — Same Fixed Height */}
+          {/* Scrollable Table */}
           <div
             ref={deptScrollContainerRef}
-            className={`${TABLE_HEIGHT} overflow-y-auto border border-gray-200 rounded-lg`}
+            className={`${TABLE_HEIGHT} overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg`}
           >
             {departments.length > 0 ? (
               <table className="w-full text-sm border-collapse">
-                <thead className="bg-gray-100 sticky top-0 z-10">
+                <thead className="bg-gray-100 dark:bg-gray-700 sticky top-0 z-10">
                   <tr>
-                    <th className="p-3 text-center text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Sr.
                     </th>
-                    <th className="p-3 text-left text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Department
                     </th>
-                    <th className="p-3 text-center text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Code
                     </th>
-                    <th className="p-3 text-center text-xs font-semibold text-gray-600">
+                    <th className="p-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300">
                       Actions
                     </th>
                   </tr>
@@ -770,24 +777,24 @@ const ManageEmployee = () => {
                             setSelectedDepartmentId(dept.value);
                           }
                         }}
-                        className={`border-b border-gray-100 cursor-pointer transition-all duration-300 ${
+                        className={`border-b border-gray-100 dark:border-gray-700 cursor-pointer transition-all duration-300 ${
                           isHighlighted
-                            ? "bg-yellow-100 border-l-4 border-l-yellow-500 ring-2 ring-yellow-300 scale-[1.01]"
+                            ? "bg-yellow-100 dark:bg-yellow-900/20 border-l-4 border-l-yellow-500 dark:border-l-yellow-400 ring-2 ring-yellow-300 dark:ring-yellow-600 scale-[1.01]"
                             : isSelected
-                              ? "bg-blue-50 border-l-4 border-l-blue-500"
-                              : "hover:bg-gray-50"
+                              ? "bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500 dark:border-l-blue-400"
+                              : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
                         }`}
                       >
-                        <td className="p-3 text-center text-gray-700">
+                        <td className="p-3 text-center text-gray-700 dark:text-gray-300">
                           {index + 1}
                         </td>
                         <td className="p-3">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-gray-800">
+                            <span className="font-medium text-gray-800 dark:text-gray-200">
                               {dept.label}
                             </span>
                             {isHighlighted && (
-                              <span className="animate-pulse inline-flex items-center bg-yellow-200 text-yellow-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                              <span className="animate-pulse inline-flex items-center bg-yellow-200 dark:bg-yellow-800/50 text-yellow-800 dark:text-yellow-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
                                 ● Linked
                               </span>
                             )}
@@ -797,8 +804,8 @@ const ManageEmployee = () => {
                           <span
                             className={`inline-flex items-center font-medium text-xs px-2 py-0.5 rounded-full transition-all ${
                               isHighlighted
-                                ? "bg-yellow-200 text-yellow-800 ring-2 ring-yellow-400"
-                                : "bg-gray-100 text-gray-700"
+                                ? "bg-yellow-200 dark:bg-yellow-800/50 text-yellow-800 dark:text-yellow-300 ring-2 ring-yellow-400 dark:ring-yellow-600"
+                                : "bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300"
                             }`}
                           >
                             {dept.value}
@@ -807,7 +814,7 @@ const ManageEmployee = () => {
                         <td className="p-3">
                           <div className="flex justify-center gap-2">
                             <button
-                              className="p-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition cursor-pointer"
+                              className="p-1.5 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/50 transition cursor-pointer"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setDepartmentDetails({
@@ -826,7 +833,7 @@ const ManageEmployee = () => {
                               <FaEdit size={14} />
                             </button>
                             <button
-                              className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition cursor-pointer"
+                              className="p-1.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition cursor-pointer"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDeleteDepartment(dept.value);
@@ -844,9 +851,11 @@ const ManageEmployee = () => {
               </table>
             ) : (
               <div className="flex flex-col items-center justify-center h-full py-12">
-                <FaBuilding className="text-5xl text-gray-300 mb-3" />
-                <p className="text-gray-500 text-sm">No departments found</p>
-                <p className="text-gray-400 text-xs mt-1">
+                <FaBuilding className="text-5xl text-gray-300 dark:text-gray-600 mb-3" />
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  No departments found
+                </p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
                   Add a department to get started
                 </p>
               </div>
@@ -854,15 +863,17 @@ const ManageEmployee = () => {
           </div>
 
           {/* Hint */}
-          <div className="mt-3 pt-3 border-t border-gray-100">
-            <p className="text-sm text-center">
+          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+            <p className="text-sm text-center text-gray-600 dark:text-gray-400">
               Click a{" "}
-              <span className="text-red-500 font-medium">department tab</span>{" "}
+              <span className="text-red-500 dark:text-red-400 font-medium">
+                department tab
+              </span>{" "}
               to filter employees.
             </p>
-            <p className="text-sm text-center">
+            <p className="text-sm text-center text-gray-600 dark:text-gray-400">
               Click a{" "}
-              <span className="text-purple-500 font-medium">
+              <span className="text-purple-500 dark:text-purple-400 font-medium">
                 department code badge
               </span>{" "}
               in employee table to locate it here.

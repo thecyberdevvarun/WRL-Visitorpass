@@ -136,7 +136,7 @@ const GeneratePass = () => {
     return (
       <div className="photo-capture-section flex flex-col gap-2 items-center justify-center mb-4">
         {error && (
-          <div className="text-red-500 text-sm bg-red-50 p-2 rounded-lg w-full text-center">
+          <div className="text-red-500 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/30 p-2 rounded-lg w-full text-center">
             {error}
           </div>
         )}
@@ -151,13 +151,13 @@ const GeneratePass = () => {
                   display: capturedPhoto ? "none" : "block",
                   transform: "scaleX(-1)",
                 }}
-                className="bg-gray-50 border border-gray-200 rounded-lg w-full max-w-xs"
+                className="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg w-full max-w-xs"
               />
               <div className="flex gap-4 mt-4">
                 <button
                   type="button"
                   onClick={startCamera}
-                  className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition cursor-pointer"
+                  className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 dark:hover:bg-blue-700 transition cursor-pointer"
                 >
                   Open Camera
                 </button>
@@ -174,7 +174,7 @@ const GeneratePass = () => {
                     }
                     capturePhoto();
                   }}
-                  className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
+                  className="px-4 py-2 bg-green-500 dark:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 dark:hover:bg-green-700 transition cursor-pointer"
                 >
                   Capture Photo
                 </button>
@@ -185,13 +185,13 @@ const GeneratePass = () => {
               <img
                 src={capturedPhoto}
                 alt="Captured"
-                className="rounded-lg border border-gray-200 w-full max-w-xs"
+                className="rounded-lg border border-gray-200 dark:border-gray-600 w-full max-w-xs"
               />
               <div className="flex mt-4">
                 <button
                   type="button"
                   onClick={() => setCapturedPhoto(null)}
-                  className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
+                  className="px-4 py-2 bg-green-500 dark:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 dark:hover:bg-green-700 transition cursor-pointer"
                 >
                   Retake
                 </button>
@@ -312,16 +312,18 @@ const GeneratePass = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 overflow-x-hidden max-w-full">
-      {/* Page Title - matches Dashboard h1 */}
-      <h1 className="text-3xl font-bold text-center mb-4">Generate Pass</h1>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-4 overflow-x-hidden max-w-full transition-colors duration-300">
+      {/* Page Title */}
+      <h1 className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-white">
+        Generate Pass
+      </h1>
 
       {/* Visitor Pass Form */}
       <form onSubmit={handleSubmit} className="mt-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* ==================== Personal Information Section ==================== */}
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-center">
+          <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
+            <h3 className="text-xl font-semibold mb-4 text-center text-gray-800 dark:text-white">
               Personal Information
             </h3>
             {renderPhotoCaptureSection()}
@@ -352,7 +354,7 @@ const GeneratePass = () => {
                     type="button"
                     onClick={handleFetchPreviousData}
                     disabled={fetchLoading}
-                    className={`px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition ${
+                    className={`px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 dark:hover:bg-blue-700 transition ${
                       fetchLoading
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer"
@@ -437,13 +439,13 @@ const GeneratePass = () => {
           </div>
 
           {/* ==================== Address & Identity Section ==================== */}
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-center">
+          <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
+            <h3 className="text-xl font-semibold mb-4 text-center text-gray-800 dark:text-white">
               Address & Identity
             </h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                   Address
                 </label>
                 <textarea
@@ -451,7 +453,11 @@ const GeneratePass = () => {
                   value={visitorData.address}
                   onChange={handleInputChange}
                   placeholder="Full Address"
-                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm 
+                    bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 
+                    placeholder-gray-400 dark:placeholder-gray-500
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 
+                    transition-colors duration-300"
                   required
                   rows={3}
                 />
@@ -560,15 +566,15 @@ const GeneratePass = () => {
           </div>
 
           {/* ==================== Visit Details Section ==================== */}
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-center">
+          <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
+            <h3 className="text-xl font-semibold mb-4 text-center text-gray-800 dark:text-white">
               Visit Details
             </h3>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-4 w-full">
                 <div className="w-full">
                   <label
-                    className="block text-sm font-semibold text-gray-700 mb-1"
+                    className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
                     htmlFor="allowOn"
                   >
                     Allow On
@@ -579,14 +585,17 @@ const GeneratePass = () => {
                     name="allowOn"
                     value={visitorData.allowOn}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm 
+                      bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 
+                      focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 
+                      transition-colors duration-300"
                     required
                   />
                 </div>
 
                 <div className="w-full">
                   <label
-                    className="block text-sm font-semibold text-gray-700 mb-1"
+                    className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
                     htmlFor="allowTill"
                   >
                     Allow Till
@@ -597,7 +606,10 @@ const GeneratePass = () => {
                     name="allowTill"
                     value={visitorData.allowTill}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm 
+                      bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 
+                      focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 
+                      transition-colors duration-300"
                     required
                   />
                 </div>
@@ -639,12 +651,12 @@ const GeneratePass = () => {
                 </div>
                 <div className="w-full">
                   <label
-                    className="block text-sm font-semibold text-gray-700 mb-1"
+                    className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1"
                     htmlFor="department"
                   >
                     Department
                   </label>
-                  <p className="border border-gray-300 p-2 rounded-lg bg-gray-50 text-sm text-gray-600">
+                  <p className="border border-gray-300 dark:border-gray-600 p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
                     {selectedDepartment ||
                       "Select an employee to view department"}
                   </p>
@@ -681,7 +693,7 @@ const GeneratePass = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                   Items / Assets Brought In
                 </label>
                 <textarea
@@ -689,14 +701,18 @@ const GeneratePass = () => {
                   value={visitorData.specialInstruction}
                   onChange={handleInputChange}
                   placeholder="List any items or assets being brought onto the premises"
-                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm 
+                    bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 
+                    placeholder-gray-400 dark:placeholder-gray-500
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 
+                    transition-colors duration-300"
                   required
                   rows={4}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                   Purpose of Visit
                 </label>
                 <textarea
@@ -704,7 +720,11 @@ const GeneratePass = () => {
                   value={visitorData.purposeOfVisit}
                   onChange={handleInputChange}
                   placeholder="Enter the Purpose of Visit"
-                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm 
+                    bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 
+                    placeholder-gray-400 dark:placeholder-gray-500
+                    focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 
+                    transition-colors duration-300"
                   required
                   rows={3}
                 />
@@ -718,7 +738,7 @@ const GeneratePass = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`px-6 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 transition ${
+            className={`px-6 py-2 bg-purple-500 dark:bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 dark:hover:bg-purple-700 transition ${
               loading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
             }`}
           >

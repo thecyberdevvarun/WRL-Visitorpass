@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import authSlice from "./authSlice";
+import authSlice from "./slices/authSlice";
+import themeSlice from "./slices/themeSlice";
 
 import { commonApi } from "./api/commonApi.js";
 
@@ -18,12 +19,12 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: [],
+  blacklist: [commonApi.reducerPath],
 };
 
 const rootReducer = combineReducers({
   auth: authSlice,
-
+  theme: themeSlice,
   [commonApi.reducerPath]: commonApi.reducer,
 });
 

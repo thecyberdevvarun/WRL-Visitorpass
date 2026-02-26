@@ -127,13 +127,17 @@ const Reports = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 max-w-full">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-4 max-w-full transition-colors duration-300">
       {/* Page Title */}
-      <h1 className="text-3xl font-bold text-center mb-4">Visitors Reports</h1>
+      <h1 className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-white">
+        Visitors Reports
+      </h1>
 
       {/* ==================== Filters Section ==================== */}
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h3 className="text-xl font-semibold mb-4">Filters & Quick Actions</h3>
+      <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 mb-6 transition-colors duration-300">
+        <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+          Filters & Quick Actions
+        </h3>
 
         <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-end">
           {/* Date Range & Query */}
@@ -150,7 +154,7 @@ const Reports = () => {
             />
             <button
               onClick={fetchVisitors}
-              className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition cursor-pointer flex items-center gap-2"
+              className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 dark:hover:bg-blue-700 transition cursor-pointer flex items-center gap-2"
             >
               {loading ? (
                 <Loader />
@@ -165,13 +169,17 @@ const Reports = () => {
           {/* Search */}
           <div className="flex flex-wrap gap-2 items-end">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                 Search
               </label>
               <input
                 type="text"
                 placeholder="Search visitor..."
-                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm 
+                  bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                  placeholder-gray-400 dark:placeholder-gray-500
+                  focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500
+                  transition-colors duration-300"
                 value={searchParams.term}
                 onChange={(e) =>
                   setSearchParams((prev) => ({
@@ -182,11 +190,14 @@ const Reports = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                 Field
               </label>
               <select
-                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm 
+                  bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                  focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500
+                  transition-colors duration-300"
                 value={searchParams.field}
                 onChange={(e) =>
                   setSearchParams((prev) => ({
@@ -209,19 +220,19 @@ const Reports = () => {
           <div className="flex flex-wrap gap-2 items-end">
             <button
               onClick={fetchYdayVisitorData}
-              className="px-4 py-2 bg-yellow-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition cursor-pointer"
+              className="px-4 py-2 bg-yellow-500 dark:bg-yellow-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-yellow-600 dark:hover:bg-yellow-700 transition cursor-pointer"
             >
               {ydayLoading ? <Loader /> : "YDAY"}
             </button>
             <button
               onClick={fetchTdayVisitorData}
-              className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition cursor-pointer"
+              className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 dark:hover:bg-blue-700 transition cursor-pointer"
             >
               {todayLoading ? <Loader /> : "TDAY"}
             </button>
             <button
               onClick={fetchMTDVisitorData}
-              className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
+              className="px-4 py-2 bg-green-500 dark:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 dark:hover:bg-green-700 transition cursor-pointer"
             >
               {monthLoading ? <Loader /> : "MTD"}
             </button>
@@ -230,7 +241,7 @@ const Reports = () => {
       </div>
 
       {/* ==================== Visitors Table ==================== */}
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
         {/* Table Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
           <div className="flex items-center gap-3">
@@ -238,143 +249,153 @@ const Reports = () => {
               <FaUsers className="text-white text-lg" />
             </div>
             <div>
-              <p className="text-gray-500 text-sm">Total Results</p>
-              <h2 className="text-2xl font-bold">{filteredReports.length}</h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Total Results
+              </p>
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+                {filteredReports.length}
+              </h2>
             </div>
           </div>
 
           <button
             onClick={handleSendReport}
-            className="px-4 py-2 bg-purple-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-purple-600 transition cursor-pointer flex items-center gap-2"
+            className="px-4 py-2 bg-purple-500 dark:bg-purple-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-purple-600 dark:hover:bg-purple-700 transition cursor-pointer flex items-center gap-2"
           >
             <FaPaperPlane className="text-xs" /> Send Report
           </button>
         </div>
 
-        {/* Full-Width Table — No Scroll */}
-        <table className="w-full table-fixed border-collapse text-[11px]">
-          <thead className="bg-gray-100">
-            <tr>
-              {[
-                { label: "Sr.", width: "w-[3%]" },
-                { label: "Type", width: "w-[5%]" },
-                { label: "Name", width: "w-[7%]" },
-                { label: "Contact", width: "w-[6%]" },
-                { label: "Email", width: "w-[7%]" },
-                { label: "Company", width: "w-[5%]" },
-                { label: "Address", width: "w-[6%]" },
-                { label: "State", width: "w-[5%]" },
-                { label: "City", width: "w-[4%]" },
-                { label: "ID Type", width: "w-[5%]" },
-                { label: "ID No", width: "w-[5%]" },
-                { label: "Vehicle", width: "w-[5%]" },
-                { label: "Employee", width: "w-[6%]" },
-                { label: "Dept.", width: "w-[5%]" },
-                { label: "Check In", width: "w-[6%]" },
-                { label: "Check Out", width: "w-[6%]" },
-                { label: "Duration", width: "w-[4%]" },
-                { label: "Visits", width: "w-[3%]" },
-                { label: "Purpose", width: "w-[5%]" },
-                { label: "Token", width: "w-[3%]" },
-              ].map((col, idx) => (
-                <th
-                  key={idx}
-                  className={`${col.width} p-2 border-b border-gray-200 text-center font-semibold text-gray-600 wrap-break-word`}
-                >
-                  {col.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
+        {/* Full-Width Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full table-fixed border-collapse text-[11px]">
+            <thead className="bg-gray-100 dark:bg-gray-700">
+              <tr>
+                {[
+                  { label: "Sr.", width: "w-[3%]" },
+                  { label: "Type", width: "w-[5%]" },
+                  { label: "Name", width: "w-[7%]" },
+                  { label: "Contact", width: "w-[6%]" },
+                  { label: "Email", width: "w-[7%]" },
+                  { label: "Company", width: "w-[5%]" },
+                  { label: "Address", width: "w-[6%]" },
+                  { label: "State", width: "w-[5%]" },
+                  { label: "City", width: "w-[4%]" },
+                  { label: "ID Type", width: "w-[5%]" },
+                  { label: "ID No", width: "w-[5%]" },
+                  { label: "Vehicle", width: "w-[5%]" },
+                  { label: "Employee", width: "w-[6%]" },
+                  { label: "Dept.", width: "w-[5%]" },
+                  { label: "Check In", width: "w-[6%]" },
+                  { label: "Check Out", width: "w-[6%]" },
+                  { label: "Duration", width: "w-[4%]" },
+                  { label: "Visits", width: "w-[3%]" },
+                  { label: "Purpose", width: "w-[5%]" },
+                  { label: "Token", width: "w-[3%]" },
+                ].map((col, idx) => (
+                  <th
+                    key={idx}
+                    className={`${col.width} p-2 border-b border-gray-200 dark:border-gray-600 text-center font-semibold text-gray-600 dark:text-gray-300 wrap-break-word`}
+                  >
+                    {col.label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
 
-          <tbody>
-            {filteredReports.length > 0 ? (
-              filteredReports.map((v, i) => (
-                <tr
-                  key={i}
-                  className="hover:bg-gray-50 transition border-b border-gray-100"
-                >
-                  <td className="p-2 text-center text-gray-700">{i + 1}</td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.visit_type || "—"}
-                  </td>
-                  <td className="p-2 text-center font-medium text-gray-800 wrap-break-word">
-                    {v.visitor_name || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.contact_no || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.email || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.company || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.address || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.state || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.city || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.identity_type || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.identity_no || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.vehicle_details || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.employee_name || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.department_name || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {formatISODateString(v.check_in_time) || "—"}
-                  </td>
-                  <td className="p-2 text-center wrap-break-word">
-                    {v.check_out_time ? (
-                      <span className="text-gray-700">
-                        {formatISODateString(v.check_out_time)}
-                      </span>
-                    ) : (
-                      <span className="text-green-600 font-bold">
-                        Currently In
-                      </span>
-                    )}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.visit_duration || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700">
-                    {v.no_of_visit || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.purpose_of_visit || "—"}
-                  </td>
-                  <td className="p-2 text-center text-gray-700 wrap-break-word">
-                    {v.token || "—"}
+            <tbody>
+              {filteredReports.length > 0 ? (
+                filteredReports.map((v, i) => (
+                  <tr
+                    key={i}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700 transition border-b border-gray-100 dark:border-gray-700"
+                  >
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300">
+                      {i + 1}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.visit_type || "—"}
+                    </td>
+                    <td className="p-2 text-center font-medium text-gray-800 dark:text-gray-200 wrap-break-word">
+                      {v.visitor_name || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.contact_no || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.email || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.company || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.address || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.state || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.city || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.identity_type || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.identity_no || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.vehicle_details || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.employee_name || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.department_name || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {formatISODateString(v.check_in_time) || "—"}
+                    </td>
+                    <td className="p-2 text-center wrap-break-word">
+                      {v.check_out_time ? (
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {formatISODateString(v.check_out_time)}
+                        </span>
+                      ) : (
+                        <span className="text-green-600 dark:text-green-400 font-bold">
+                          Currently In
+                        </span>
+                      )}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.visit_duration || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300">
+                      {v.no_of_visit || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.purpose_of_visit || "—"}
+                    </td>
+                    <td className="p-2 text-center text-gray-700 dark:text-gray-300 wrap-break-word">
+                      {v.token || "—"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={20} className="text-center py-12">
+                    <FaFileAlt className="text-5xl text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      No visitors found.
+                    </p>
+                    <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">
+                      Try adjusting your filters or date range
+                    </p>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={20} className="text-center py-12">
-                  <FaFileAlt className="text-5xl text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 text-sm">No visitors found.</p>
-                  <p className="text-gray-400 text-xs mt-1">
-                    Try adjusting your filters or date range
-                  </p>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

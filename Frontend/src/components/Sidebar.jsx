@@ -16,21 +16,29 @@ const Sidebar = ({ isSidebarExpanded, toggleSidebar }) => {
   };
 
   const isActive = (path) =>
-    location.pathname === path ? "bg-blue-500 text-white" : "text-gray-300";
+    location.pathname === path
+      ? "bg-blue-500 text-white"
+      : "text-gray-600 dark:text-gray-300";
 
   return (
     <aside
-      className={`fixed min-h-screen bg-gray-900 text-white transition-all duration-300 ease-in-out ${
-        isSidebarExpanded ? "w-64" : "w-16"
-      } p-4 shadow-xl flex flex-col z-50`}
+      className={`fixed min-h-screen 
+        bg-white dark:bg-gray-900 
+        text-gray-800 dark:text-white 
+        border-r border-gray-200 dark:border-gray-700
+        transition-all duration-300 ease-in-out ${
+          isSidebarExpanded ? "w-64" : "w-16"
+        } p-4 shadow-xl dark:shadow-gray-950 flex flex-col z-50`}
     >
       <div className="shrink-0">
         <div className="flex justify-between mb-4">
           {isSidebarExpanded && (
-            <h1 className="text-2xl font-playfair">Dashboard</h1>
+            <h1 className="text-2xl font-playfair text-gray-800 dark:text-white">
+              Dashboard
+            </h1>
           )}
           <button
-            className="text-gray-300 hover:text-white focus:outline-none text-2xl cursor-pointer"
+            className="text-gray-500 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none text-2xl cursor-pointer transition-colors"
             onClick={toggleSidebar}
             aria-label={
               isSidebarExpanded ? "Collapse sidebar" : "Expand sidebar"
@@ -47,22 +55,25 @@ const Sidebar = ({ isSidebarExpanded, toggleSidebar }) => {
             return (
               <li key={menu.key}>
                 <div
-                  className="flex items-center justify-between cursor-pointer p-3 rounded-lg hover:bg-gray-700 transition"
+                  className="flex items-center justify-between cursor-pointer p-3 rounded-lg 
+                    hover:bg-gray-100 dark:hover:bg-gray-700 
+                    text-gray-700 dark:text-gray-200
+                    transition-colors"
                   onClick={() => toggleMenu(menu.key)}
                   role="button"
                   aria-expanded={expandedMenus[menu.key]}
                 >
                   <div className="flex items-center">
-                    <MenuIcon className="mr-3 shrink-0" />
+                    <MenuIcon className="mr-3 shrink-0 text-gray-500 dark:text-gray-400" />
                     {isSidebarExpanded && (
                       <span className="font-semibold">{menu.label}</span>
                     )}
                   </div>
                   {isSidebarExpanded &&
                     (expandedMenus[menu.key] ? (
-                      <FaChevronUp />
+                      <FaChevronUp className="text-gray-400 dark:text-gray-500" />
                     ) : (
-                      <FaChevronDown />
+                      <FaChevronDown className="text-gray-400 dark:text-gray-500" />
                     ))}
                 </div>
 
@@ -72,7 +83,9 @@ const Sidebar = ({ isSidebarExpanded, toggleSidebar }) => {
                       <li key={item.path}>
                         <Link
                           to={item.path}
-                          className={`block p-2 rounded-lg hover:bg-gray-700 transition ${isActive(item.path)}`}
+                          className={`block p-2 rounded-lg 
+                            hover:bg-gray-100 dark:hover:bg-gray-700 
+                            transition-colors ${isActive(item.path)}`}
                           onClick={() => window.scrollTo(0, 0)}
                         >
                           {item.label}

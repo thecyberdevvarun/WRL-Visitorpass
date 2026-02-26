@@ -22,13 +22,15 @@ import { formatISODateString } from "../../utils/dateUtils";
 
 /* ==================== Counter Card (Dashboard-style) ==================== */
 const CounterCard = ({ icon: Icon, title, value, color }) => (
-  <div className="bg-white shadow-md rounded-lg p-4 flex items-center">
+  <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-4 flex items-center transition-colors duration-300">
     <div className={`mr-4 p-3 rounded-full ${color}`}>
       <Icon className="text-white text-2xl" />
     </div>
     <div>
-      <p className="text-gray-500 text-sm">{title}</p>
-      <h2 className="text-2xl font-bold">{value}</h2>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">{title}</p>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+        {value}
+      </h2>
     </div>
   </div>
 );
@@ -173,9 +175,11 @@ const InOut = () => {
   const currentlyOut = filteredVisitors.filter((v) => v.check_out_time).length;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 overflow-x-hidden max-w-full relative">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-4 overflow-x-hidden max-w-full relative transition-colors duration-300">
       {/* Page Title */}
-      <h1 className="text-3xl font-bold text-center mb-4">Manage Visitor</h1>
+      <h1 className="text-3xl font-bold text-center mb-4 text-gray-800 dark:text-white">
+        Manage Visitor
+      </h1>
 
       {/* Search Bar */}
       <div className="max-w-md mx-auto mb-6">
@@ -184,7 +188,11 @@ const InOut = () => {
           placeholder="Search by name, pass ID, department..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg p-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm shadow-sm 
+            bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200
+            placeholder-gray-400 dark:placeholder-gray-500
+            focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500
+            transition-colors duration-300"
         />
       </div>
 
@@ -213,9 +221,10 @@ const InOut = () => {
       {/* Scan In / Out */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Scan IN Card */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-gray-500 mb-2 flex items-center gap-2">
-            <FaSignInAlt className="text-green-500" /> Scan IN
+        <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-4 transition-colors duration-300">
+          <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-2">
+            <FaSignInAlt className="text-green-500 dark:text-green-400" /> Scan
+            IN
           </h3>
           <div className="flex gap-2">
             <input
@@ -228,17 +237,21 @@ const InOut = () => {
                   e.target.value = "";
                 }
               }}
-              className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm 
+                bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                placeholder-gray-400 dark:placeholder-gray-500
+                focus:outline-none focus:ring-2 focus:ring-green-400 dark:focus:ring-green-500
+                transition-colors duration-300"
             />
             <button
               onClick={(e) => {
                 const input = e.target
-                  .closest(".bg-white")
+                  .closest("[data-scan-card]")
                   .querySelector("input");
                 handleVisitorActionForCard("in", input.value);
                 input.value = "";
               }}
-              className="px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 transition cursor-pointer"
+              className="px-4 py-2 bg-green-500 dark:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-green-600 dark:hover:bg-green-700 transition cursor-pointer"
             >
               IN
             </button>
@@ -246,9 +259,9 @@ const InOut = () => {
         </div>
 
         {/* Scan OUT Card */}
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-gray-500 mb-2 flex items-center gap-2">
-            <FaSignOutAlt className="text-red-500" /> Scan OUT
+        <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-4 transition-colors duration-300">
+          <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-2">
+            <FaSignOutAlt className="text-red-500 dark:text-red-400" /> Scan OUT
           </h3>
           <div className="flex gap-2">
             <input
@@ -261,17 +274,21 @@ const InOut = () => {
                   e.target.value = "";
                 }
               }}
-              className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm 
+                bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                placeholder-gray-400 dark:placeholder-gray-500
+                focus:outline-none focus:ring-2 focus:ring-red-400 dark:focus:ring-red-500
+                transition-colors duration-300"
             />
             <button
               onClick={(e) => {
                 const input = e.target
-                  .closest(".bg-white")
+                  .closest("[data-scan-card]")
                   .querySelector("input");
                 handleVisitorActionForCard("out", input.value);
                 input.value = "";
               }}
-              className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-600 transition cursor-pointer"
+              className="px-4 py-2 bg-red-500 dark:bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-600 dark:hover:bg-red-700 transition cursor-pointer"
             >
               OUT
             </button>
@@ -280,14 +297,18 @@ const InOut = () => {
       </div>
 
       {/* Visitor List Container */}
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">Visitor Log</h3>
+      <div className="bg-white dark:bg-gray-800 shadow-md dark:shadow-gray-900 rounded-lg p-6 transition-colors duration-300">
+        <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
+          Visitor Log
+        </h3>
 
         {/* Visitor List */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin h-10 w-10 border-b-2 border-blue-500 rounded-full mx-auto"></div>
-            <p className="text-gray-500 text-sm mt-4">Loading visitors...</p>
+            <div className="animate-spin h-10 w-10 border-b-2 border-blue-500 dark:border-blue-400 rounded-full mx-auto"></div>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-4">
+              Loading visitors...
+            </p>
           </div>
         ) : filteredVisitors.length > 0 ? (
           <div className="grid gap-4">
@@ -304,10 +325,10 @@ const InOut = () => {
                   key={visitor.pass_id || index}
                   className={`transition-all duration-200 rounded-lg p-5 border ${
                     isCurrentlyIn
-                      ? "bg-green-50 border-green-300"
+                      ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700"
                       : atSecurityGate
-                        ? "bg-blue-50 border-blue-300"
-                        : "bg-gray-50 border-gray-200"
+                        ? "bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700"
+                        : "bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600"
                   }`}
                 >
                   <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5">
@@ -323,10 +344,10 @@ const InOut = () => {
                         <img
                           src={visitor.visitor_photo}
                           alt={`${visitor.visitor_name || "Visitor"}'s photo`}
-                          className="w-20 h-20 object-cover rounded-full border-4 border-blue-300 shadow-md hover:scale-105 transition-transform"
+                          className="w-20 h-20 object-cover rounded-full border-4 border-blue-300 dark:border-blue-500 shadow-md hover:scale-105 transition-transform"
                         />
                       ) : (
-                        <div className="w-20 h-20 flex items-center justify-center bg-gray-100 rounded-full border-4 border-gray-300 text-gray-400 shadow-md">
+                        <div className="w-20 h-20 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded-full border-4 border-gray-300 dark:border-gray-500 text-gray-400 dark:text-gray-300 shadow-md">
                           <CgProfile className="text-4xl" />
                         </div>
                       )}
@@ -345,11 +366,11 @@ const InOut = () => {
 
                     {/* Visitor Info */}
                     <div className="flex-1 text-center lg:text-left">
-                      <h3 className="text-lg font-bold text-gray-800 mb-0.5">
+                      <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-0.5">
                         {visitor.visitor_name}
                       </h3>
 
-                      <p className="text-xs text-gray-500 mb-3">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                         <span className="font-medium">Pass ID:</span>{" "}
                         {visitor.pass_id}
                       </p>
@@ -357,26 +378,26 @@ const InOut = () => {
                       {/* Times */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
                         <div className="flex items-center gap-2 text-sm">
-                          <MdAccessTime className="text-green-500 text-lg" />
-                          <span className="font-medium text-gray-700">
+                          <MdAccessTime className="text-green-500 dark:text-green-400 text-lg" />
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
                             Check In:
                           </span>
-                          <span className="text-gray-600">
+                          <span className="text-gray-600 dark:text-gray-400">
                             {formatISODateString(visitor.check_in_time) ||
                               "N/A"}
                           </span>
                         </div>
 
                         <div className="flex items-center gap-2 text-sm">
-                          <MdAccessTime className="text-red-500 text-lg" />
-                          <span className="font-medium text-gray-700">
+                          <MdAccessTime className="text-red-500 dark:text-red-400 text-lg" />
+                          <span className="font-medium text-gray-700 dark:text-gray-300">
                             Check Out:
                           </span>
-                          <span className="text-gray-600">
+                          <span className="text-gray-600 dark:text-gray-400">
                             {visitor.check_out_time ? (
                               formatISODateString(visitor.check_out_time)
                             ) : isCurrentlyIn ? (
-                              <span className="text-green-600 font-bold">
+                              <span className="text-green-600 dark:text-green-400 font-bold">
                                 Currently In
                               </span>
                             ) : (
@@ -387,33 +408,33 @@ const InOut = () => {
                       </div>
 
                       {/* Details */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600 dark:text-gray-400">
                         <div className="space-y-1.5">
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
-                            <MdBusiness className="text-purple-500" />
+                            <MdBusiness className="text-purple-500 dark:text-purple-400" />
                             <span>{visitor.employee_name || "N/A"}</span>
                           </div>
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
-                            <MdPhone className="text-blue-500" />
+                            <MdPhone className="text-blue-500 dark:text-blue-400" />
                             <span>{visitor.visitor_contact_no || "N/A"}</span>
                           </div>
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
-                            <MdBusiness className="text-purple-500" />
+                            <MdBusiness className="text-purple-500 dark:text-purple-400" />
                             <span>{visitor.purpose_of_visit || "N/A"}</span>
                           </div>
                         </div>
 
                         <div className="space-y-1.5">
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
-                            <MdBusiness className="text-purple-500" />
+                            <MdBusiness className="text-purple-500 dark:text-purple-400" />
                             <span>{visitor.department_name || "N/A"}</span>
                           </div>
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
-                            <MdEmail className="text-green-500" />
+                            <MdEmail className="text-green-500 dark:text-green-400" />
                             <span>{visitor.company || "N/A"}</span>
                           </div>
                           <div className="flex items-center gap-2 justify-center lg:justify-start">
-                            <MdLocationOn className="text-red-500" />
+                            <MdLocationOn className="text-red-500 dark:text-red-400" />
                             <span>{visitor.vehicle_details || "N/A"}</span>
                           </div>
                         </div>
@@ -426,7 +447,7 @@ const InOut = () => {
                             onClick={() =>
                               handleVisitorActionForCard("in", visitor.pass_id)
                             }
-                            className="px-4 py-2 bg-blue-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 transition cursor-pointer flex items-center gap-2"
+                            className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-600 dark:hover:bg-blue-700 transition cursor-pointer flex items-center gap-2"
                           >
                             <FaSignInAlt /> In
                           </button>
@@ -441,7 +462,7 @@ const InOut = () => {
                                   visitor.pass_id,
                                 )
                               }
-                              className="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-600 transition cursor-pointer flex items-center gap-2"
+                              className="px-4 py-2 bg-red-500 dark:bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-600 dark:hover:bg-red-700 transition cursor-pointer flex items-center gap-2"
                             >
                               <FaSignOutAlt /> Out
                             </button>
@@ -452,7 +473,7 @@ const InOut = () => {
                                   `/visitor-pass-display/${visitor.pass_id}`,
                                 )
                               }
-                              className="px-4 py-2 bg-purple-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-purple-600 transition cursor-pointer flex items-center gap-2"
+                              className="px-4 py-2 bg-purple-500 dark:bg-purple-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-purple-600 dark:hover:bg-purple-700 transition cursor-pointer flex items-center gap-2"
                             >
                               Reprint Pass
                             </button>
@@ -467,11 +488,11 @@ const InOut = () => {
           </div>
         ) : (
           <div className="text-center py-16">
-            <FaUser className="text-6xl text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-500">
+            <FaUser className="text-6xl text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-medium text-gray-500 dark:text-gray-400">
               No visitors found
             </h3>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
               Try adjusting your search criteria
             </p>
           </div>
@@ -481,7 +502,7 @@ const InOut = () => {
       {/* Photo Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 flex justify-center items-center z-50"
           onClick={() => setSelectedImage(null)}
         >
           <div
@@ -491,11 +512,11 @@ const InOut = () => {
             <img
               src={selectedImage}
               alt="Visitor"
-              className="max-h-[80vh] rounded-lg shadow-2xl border-4 border-white"
+              className="max-h-[80vh] rounded-lg shadow-2xl border-4 border-white dark:border-gray-700"
             />
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute -top-4 -right-4 bg-red-500 text-white rounded-full p-2 shadow-lg hover:bg-red-600 transition cursor-pointer"
+              className="absolute -top-4 -right-4 bg-red-500 dark:bg-red-600 text-white rounded-full p-2 shadow-lg hover:bg-red-600 dark:hover:bg-red-700 transition cursor-pointer"
             >
               <FaTimes className="text-lg" />
             </button>

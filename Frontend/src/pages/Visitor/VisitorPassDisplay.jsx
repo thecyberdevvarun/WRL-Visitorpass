@@ -17,10 +17,8 @@ const VisitorPassDisplay = () => {
         if (res?.data?.success) {
           const data = res.data.data;
 
-          // Generate QR Code from passId (or any data)
           const qrDataUrl = await QRCode.toDataURL(passId);
 
-          // Add the generated QR code to the passDetails object
           setPassDetails({ ...data, qrCode: qrDataUrl });
         } else {
           toast.error("Failed to fetch pass details");
@@ -40,17 +38,39 @@ const VisitorPassDisplay = () => {
     window.print();
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (!passDetails) return <div>No pass details found</div>;
+  if (loading)
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex items-center justify-center transition-colors duration-300">
+        <div className="text-center">
+          <div className="animate-spin h-10 w-10 border-b-2 border-blue-500 dark:border-blue-400 rounded-full mx-auto"></div>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-4">
+            Loading pass details...
+          </p>
+        </div>
+      </div>
+    );
+
+  if (!passDetails)
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-950 flex items-center justify-center transition-colors duration-300">
+        <div className="text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
+            No pass details found
+          </p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+            The pass ID may be invalid or expired
+          </p>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 overflow-x-hidden max-w-full">
-      {/* WRAP ONLY THE PRINT AREA IN A UNIQUE CONTAINER */}
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-4 overflow-x-hidden max-w-full transition-colors duration-300">
       <div className="visitor-pass-print-area relative w-full max-w-full border-4 border-double border-black p-1 bg-white box-border">
         {/* QR Top Right */}
         <div className="absolute top-0 right-20">
           <img
-            src={passDetails.qrCode || "https://via.placeholder.com/100"}
+            src={passDetails?.qrCode || "https://via.placeholder.com/100"}
             alt="QR Code"
             className="w-36 h-36 rounded-lg"
           />
@@ -59,7 +79,7 @@ const VisitorPassDisplay = () => {
         {/* Profile Top Left */}
         <div className="absolute top-4 left-20">
           <img
-            src={passDetails.visitor_photo || "https://via.placeholder.com/80"}
+            src={passDetails?.visitor_photo || "https://via.placeholder.com/80"}
             alt="Profile Pic"
             className="block w-30 h-30 object-cover"
           />
@@ -67,8 +87,10 @@ const VisitorPassDisplay = () => {
 
         {/* Header */}
         <div className="text-center mb-2">
-          <h1 className="text-lg font-bold">Western Refrigeration Pvt. Ltd</h1>
-          <p className="text-xs leading-tight">
+          <h1 className="text-lg font-bold text-black">
+            Western Refrigeration Pvt. Ltd
+          </h1>
+          <p className="text-xs leading-tight text-black">
             Survey No 631, 633, 634, 635, 636, 647, 654,
             <br />
             707, 726, 732, 741, 748, 752,
@@ -81,7 +103,7 @@ const VisitorPassDisplay = () => {
 
         {/* Pass Title */}
         <div className="flex items-center justify-center">
-          <h2 className="text-xl font-bold text-center border-2 border-black inline-block px-4 py-1 mb-2">
+          <h2 className="text-xl font-bold text-center text-black border-2 border-black inline-block px-4 py-1 mb-2">
             Visitor Pass
           </h2>
         </div>
@@ -89,47 +111,47 @@ const VisitorPassDisplay = () => {
         {/* Pass Details */}
         <div className="flex justify-between border-2 border-black p-4 mb-3 gap-4">
           {/* Left Column */}
-          <div className="w-1/3 space-y-1 text-xs">
+          <div className="w-1/3 space-y-1 text-xs text-black">
             <div className="flex gap-2">
               <strong>Name:</strong>
-              <span>{passDetails.visitor_name}</span>
+              <span>{passDetails?.visitor_name}</span>
             </div>
             <div className="flex gap-2">
               <strong>Contact No:</strong>
-              <span>{passDetails.visitor_contact_no}</span>
+              <span>{passDetails?.visitor_contact_no}</span>
             </div>
             <div className="flex gap-2">
               <strong>Company:</strong>
-              <span>{passDetails.company[0]}</span>
+              <span>{passDetails?.company?.[0]}</span>
             </div>
             <div className="flex gap-2">
               <strong>Purpose:</strong>
-              <span>{passDetails.purpose_of_visit[0]}</span>
+              <span>{passDetails?.purpose_of_visit?.[0]}</span>
             </div>
           </div>
 
           {/* Middle Column */}
-          <div className="w-1/3 space-y-1 text-xs">
+          <div className="w-1/3 space-y-1 text-xs text-black">
             <div className="flex gap-2">
               <strong>Department:</strong>
-              <span>{passDetails.department_name[0]}</span>
+              <span>{passDetails?.department_name?.[0]}</span>
             </div>
             <div className="flex gap-2">
               <strong>Employee To Meet:</strong>
-              <span>{passDetails.employee_name[0]}</span>
+              <span>{passDetails?.employee_name?.[0]}</span>
             </div>
             <div className="flex gap-2">
               <strong>Valid From:</strong>
-              <span>{new Date(passDetails.allow_on).toLocaleString()}</span>
+              <span>{new Date(passDetails?.allow_on).toLocaleString()}</span>
             </div>
             <div className="flex gap-2">
               <strong>Valid Till:</strong>
-              <span>{new Date(passDetails.allow_till).toLocaleString()}</span>
+              <span>{new Date(passDetails?.allow_till).toLocaleString()}</span>
             </div>
           </div>
 
-          {/* Right Column - QR Code */}
-          <div className="w-1/3 space-y-1 text-xs">
+          {/* Right Column */}
+          <div className="w-1/3 space-y-1 text-xs text-black">
             <div className="flex gap-2">
               <strong>Visitor PassId:</strong>
               <span>{passId}</span>
@@ -138,7 +160,7 @@ const VisitorPassDisplay = () => {
         </div>
 
         {/* Signatures */}
-        <div className="flex justify-between text-xs mt-12">
+        <div className="flex justify-between text-xs text-black mt-12">
           <div className="w-1/3 text-center border-t border-black pt-1">
             Security Off.
           </div>
@@ -151,7 +173,7 @@ const VisitorPassDisplay = () => {
         </div>
 
         {/* Note Section */}
-        <div className="border border-dashed border-black p-2 mt-2 text-[10px] leading-tight">
+        <div className="border border-dashed border-black p-2 mt-2 text-[10px] leading-tight text-black">
           <p className="font-bold">NOTE:</p>
           <ol className="list-decimal ml-4">
             <li>Return pass duly signed and timed by the employee visited.</li>
@@ -163,8 +185,7 @@ const VisitorPassDisplay = () => {
         </div>
 
         {/* Instructions Section */}
-        <div className="border border-dashed border-black p-2 mt-1 text-[10px] leading-tight">
-          {/* Wrapper div to arrange both inner divs side by side */}
+        <div className="border border-dashed border-black p-2 mt-1 text-[10px] leading-tight text-black">
           <div className="flex justify-between gap-4">
             {/* Left: Instructions block */}
             <div className="w-3/4">
@@ -211,11 +232,11 @@ const VisitorPassDisplay = () => {
         </div>
       </div>
 
-      {/* Print Button */}
+      {/* Print Button — Hidden during print */}
       <div className="flex justify-center mt-3 no-print">
         <button
           onClick={handlePrint}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 dark:bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors cursor-pointer shadow-md"
         >
           Print Pass
         </button>
@@ -234,6 +255,9 @@ const VisitorPassDisplay = () => {
           .visitor-pass-print-area,
           .visitor-pass-print-area * {
             visibility: visible;
+            /* Force white background and black text for printing */
+            background-color: white !important;
+            color: black !important;
           }
           .visitor-pass-print-area {
             position: absolute;
