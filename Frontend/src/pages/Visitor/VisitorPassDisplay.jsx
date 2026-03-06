@@ -16,7 +16,7 @@ const VisitorPassDisplay = () => {
         const res = await axios.get(`${baseURL}visitor/pass-details/${passId}`);
         if (res?.data?.success) {
           const data = res.data.data;
-
+console.log(data)
           const qrDataUrl = await QRCode.toDataURL(passId);
 
           setPassDetails({ ...data, qrCode: qrDataUrl });
@@ -122,11 +122,11 @@ const VisitorPassDisplay = () => {
             </div>
             <div className="flex gap-2">
               <strong>Company:</strong>
-              <span>{passDetails?.company?.[0]}</span>
+              <span>{passDetails?.company}</span>
             </div>
             <div className="flex gap-2">
               <strong>Purpose:</strong>
-              <span>{passDetails?.purpose_of_visit?.[0]}</span>
+              <span>{passDetails?.purpose_of_visit}</span>
             </div>
           </div>
 
@@ -134,11 +134,11 @@ const VisitorPassDisplay = () => {
           <div className="w-1/3 space-y-1 text-xs text-black">
             <div className="flex gap-2">
               <strong>Department:</strong>
-              <span>{passDetails?.department_name?.[0]}</span>
+              <span>{passDetails?.department_name}</span>
             </div>
             <div className="flex gap-2">
               <strong>Employee To Meet:</strong>
-              <span>{passDetails?.employee_name?.[0]}</span>
+              <span>{passDetails?.employee_name}</span>
             </div>
             <div className="flex gap-2">
               <strong>Valid From:</strong>

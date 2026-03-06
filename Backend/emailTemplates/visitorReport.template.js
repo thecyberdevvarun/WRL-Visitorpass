@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import transporter from "../../config/email.config.js";
+import transporter from "../config/email.config.js";
 
 // -------------------- Visitor Report Email --------------------
 export const sendVisitorReportMail = async (visitors) => {
