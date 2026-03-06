@@ -16,7 +16,7 @@ const VisitorPassDisplay = () => {
         const res = await axios.get(`${baseURL}visitor/pass-details/${passId}`);
         if (res?.data?.success) {
           const data = res.data.data;
-console.log(data)
+
           const qrDataUrl = await QRCode.toDataURL(passId);
 
           setPassDetails({ ...data, qrCode: qrDataUrl });

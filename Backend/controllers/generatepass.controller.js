@@ -4,8 +4,8 @@ import { tryCatch } from "../utils/tryCatch.js";
 import { AppError } from "../utils/AppError.js";
 import { generateId } from "../utils/generateId.js";
 
-/* Generate Visitor Pass */
-export const generateVisitorPass = tryCatch(async (req, res) => {
+/* Generate Visitor Pass with Phone Number Check */
+export const generateVisitorPass = async (req, res) => {
   const {
     visitorPhoto,
     name,
@@ -33,12 +33,17 @@ export const generateVisitorPass = tryCatch(async (req, res) => {
   } = req.body;
 
   if (!name || !contactNo) {
-    throw new AppError("Name and Contact No are required", 400);
+    return res.status(400).json({
+      success: false,
+      message: "Name and Contact No are required",
+    });
   }
 
-  const pool = await new sql.ConnectionPool(dbConfig2).connect();
+  let pool;
 
   try {
+    pool = await new sql.ConnectionPool(dbConfig2).connect();
+
     /* ---------- Check Existing Visitor ---------- */
 
     const existingVisitor = await pool
@@ -48,39 +53,11 @@ export const generateVisitorPass = tryCatch(async (req, res) => {
 
     let visitorId;
 
-    /* ---------- If Visitor Exists → UPDATE ---------- */
-
-    if (existingVisitor.recordset.length) {
+    if (existingVisitor.recordset.length > 0) {
+      // Visitor exists → reuse ID
       visitorId = existingVisitor.recordset[0].visitor_id;
-
-      await pool
-        .request()
-        .input("VisitorId", sql.VarChar(50), visitorId)
-        .input("Company", sql.VarChar(255), company || null)
-        .input("Nationality", sql.VarChar(100), nationality || null)
-        .input("IdentityType", sql.VarChar(50), identityType || null)
-        .input("IdentityNo", sql.VarChar(100), identityNo || null)
-        .input("Address", sql.NVarChar(sql.MAX), address || null)
-        .input("Country", sql.VarChar(100), country || null)
-        .input("State", sql.VarChar(100), state || null)
-        .input("City", sql.VarChar(100), city || null)
-        .input("VehicleDetails", sql.VarChar(100), vehicleDetails || null)
-        .query(`
-          UPDATE visitors
-          SET 
-            company = @Company,
-            nationality = @Nationality,
-            identity_type = @IdentityType,
-            identity_no = @IdentityNo,
-            address = @Address,
-            country = @Country,
-            state = @State,
-            city = @City,
-            vehicle_details = @VehicleDetails
-          WHERE visitor_id = @VisitorId
-        `);
     } else {
-      /* ---------- If Visitor Not Exists → INSERT ---------- */
+      // Visitor not found → create new
       visitorId = generateId("WRLV");
 
       await pool
@@ -101,19 +78,19 @@ export const generateVisitorPass = tryCatch(async (req, res) => {
         .input("VisitorPhoto", sql.NVarChar(sql.MAX), visitorPhoto || null)
         .query(`
           INSERT INTO visitors (
-            visitor_id,name,contact_no,email,company,nationality,
-            identity_type,identity_no,address,country,state,city,
-            vehicle_details,photo_url
+            visitor_id, name, contact_no, email, company, nationality,
+            identity_type, identity_no, address, country, state, city,
+            vehicle_details, photo_url
           )
           VALUES (
-            @VisitorId,@Name,@ContactNo,@Email,@Company,@Nationality,
-            @IdentityType,@IdentityNo,@Address,@Country,@State,@City,
-            @VehicleDetails,@VisitorPhoto
+            @VisitorId, @Name, @ContactNo, @Email, @Company, @Nationality,
+            @IdentityType, @IdentityNo, @Address, @Country, @State, @City,
+            @VehicleDetails, @VisitorPhoto
           )
         `);
     }
 
-    /* ---------- Create Visitor Pass ---------- */
+    /* ---------- Generate Pass ---------- */
 
     const passId = generateId("WRLVP");
 
@@ -139,21 +116,29 @@ export const generateVisitorPass = tryCatch(async (req, res) => {
       )
       .input("PurposeOfVisit", sql.VarChar(100), purposeOfVisit || null)
       .input("CreatedBy", sql.VarChar(50), createdBy || null)
+      .input("Company", sql.VarChar(255), company || null)
+      .input("Nationality", sql.VarChar(100), nationality || null)
+      .input("IdentityType", sql.VarChar(50), identityType || null)
+      .input("IdentityNo", sql.VarChar(100), identityNo || null)
+      .input("Address", sql.NVarChar(sql.MAX), address || null)
+      .input("Country", sql.VarChar(100), country || null)
+      .input("State", sql.VarChar(100), state || null)
+      .input("City", sql.VarChar(100), city || null)
+      .input("VehicleDetails", sql.VarChar(100), vehicleDetails || null)
       .input("Status", sql.Int, 1).query(`
         INSERT INTO visitor_passes (
-          pass_id, visitor_id, visitor_photo, visitor_name,
-          visitor_contact_no, visitor_email, department_to_visit,
-          employee_to_visit, visit_type, token, no_of_people,
-          allow_on, allow_till, special_instructions,
-          purpose_of_visit, created_by, status
+          pass_id, visitor_id, visitor_photo, visitor_name, visitor_contact_no,
+          visitor_email, department_to_visit, employee_to_visit, visit_type,
+          token, no_of_people, allow_on, allow_till, special_instructions,
+          purpose_of_visit, created_by, company, nationality, identity_type,
+          identity_no, address, country, state, city, vehicle_details, status
         )
         VALUES (
-          @PassId,@VisitorId,@VisitorPhoto,@Name,
-          @ContactNo,@Email,@DepartmentToVisit,
-          @EmployeeToVisit,@VisitType,@Token,
-          @NoOfPeople,@AllowOn,@AllowTill,
-          @SpecialInstructions,@PurposeOfVisit,
-          @CreatedBy,@Status
+          @PassId, @VisitorId, @VisitorPhoto, @Name, @ContactNo, @Email,
+          @DepartmentToVisit, @EmployeeToVisit, @VisitType, @Token, @NoOfPeople,
+          @AllowOn, @AllowTill, @SpecialInstructions, @PurposeOfVisit, @CreatedBy,
+          @Company, @Nationality, @IdentityType, @IdentityNo, @Address, @Country,
+          @State, @City, @VehicleDetails, @Status
         )
       `);
 
@@ -163,12 +148,21 @@ export const generateVisitorPass = tryCatch(async (req, res) => {
       data: {
         passId,
         visitorId,
+        name,
+        departmentToVisit: departmentTo,
       },
     });
+  } catch (error) {
+    console.error("Error generating visitor pass:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate visitor pass",
+    });
   } finally {
-    await pool.close();
+    if (pool) await pool.close();
   }
-});
+};
 
 /* Fetch Previous Visitor */
 export const fetchPreviousPass = tryCatch(async (req, res) => {

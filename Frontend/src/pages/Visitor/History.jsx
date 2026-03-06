@@ -588,7 +588,7 @@ const History = () => {
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
                             <div className="flex items-center gap-2">
                               <span className="text-xs font-bold text-white bg-blue-500 dark:bg-blue-600 px-2 py-0.5 rounded-full">
-                                #{index + 1}
+                                #{visitLogs.length - index}
                               </span>
                               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {formatISODateString(log.check_in_time) ||
